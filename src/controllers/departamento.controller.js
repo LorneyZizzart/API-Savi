@@ -79,6 +79,23 @@ function cmdSQL(query, res) {
     });
 }
 
+function dateNow(){
+    var fechaRegistro = new Date();
+        var dd = fechaRegistro.getDate();
+        var mm = fechaRegistro.getMonth() + 1;
+        var yyyy = fechaRegistro.getFullYear();
+
+        if (dd < 10) {
+            dd = '0' + dd;
+          }
+          
+          if (mm < 10) {
+            mm = '0' + mm;
+          }
+
+          return fechaRegistro = dd+'/'+mm+'/'+yyyy;
+}
+
 
 module.exports = {
     getDepartamentos: (req, res) => {
@@ -88,17 +105,18 @@ module.exports = {
         SearchDepartamento(req, res);
     },
     addDepartamento: (req, res) => {
+        
 
         var query = "INSERT INTO Departamento VALUES ( '" +
-            req.body.nombreDepartamento + "', '2018/11/20', 1)";
+            req.body.nombreDepartamento + "', '" +
+            dateNow() + "', 1)";
         cmdSQL(query, res);
     },
     updateDepartamento: (req, res) => {
 
         var query = "UPDATE Departamento SET " +
             "nombre = '" + req.body.nombre + "', " +
-            "limiteEstudiante = " + req.body.limiteEstudiante + ", " +
-            "fechaRegistro = '" + req.body.fechaRegistro + "', " +
+            "fechaRegistro = '" + dateNow() + "', " +
             "estado = " + req.body.estado +
             " WHERE idDepartamento = " + req.params.id;
 

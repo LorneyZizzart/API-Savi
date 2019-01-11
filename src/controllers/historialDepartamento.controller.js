@@ -24,19 +24,36 @@ function cmdSQL(query, res) {
     });
 }
 
+function dateNow(){
+    var fechaRegistro = new Date();
+        var dd = fechaRegistro.getDate();
+        var mm = fechaRegistro.getMonth() + 1;
+        var yyyy = fechaRegistro.getFullYear();
+
+        if (dd < 10) {
+            dd = '0' + dd;
+          }
+          
+          if (mm < 10) {
+            mm = '0' + mm;
+          }
+
+          return fechaRegistro = dd+'/'+mm+'/'+yyyy;
+}
+
 
 module.exports = {
     getHistorialDepartamentos: (req, res) => {
-        var query = "SELECT * FROM Departamento";
+        var query = "SELECT MAX(idDepartamento) as idDepartamento FROM Departamento";
         cmdSQL(query, res);
     },
-    getHistorialDepartamento: (req, res) => {},
     addHistorialDepartamento: (req, res) => {
 
         var query = "INSERT INTO HistorialDepartamento VALUES (" +
             req.body.idDepartamento + ", " +
             req.body.limiteEstudiante + ", '" +
-            req.body.costoHora + "', '2018/11/20', 1)";
+            req.body.costoHora + "', '" + 
+            dateNow() + "', 1)";
         cmdSQL(query, res);
     },
     updateHistorialDepartamento: (req, res) => {},

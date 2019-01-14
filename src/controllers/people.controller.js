@@ -7,78 +7,29 @@ var config = {
     database: "Savi"
 };
 
-function listPeople(res) {
-
-    sql.connect(config, function(err) {
-        if (err) {
-            console.log(err);
-        }
-        var request = new sql.Request();
-        request.query('SELECT * FROM Persona', function(err, result) {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            var data = {};
-            data = result.recordset;
-            res.send(data);
-            sql.close();
-        })
+async function cmdSQL(query, res) {
+    new sql.ConnectionPool(config).connect().then(pool => {
+        return pool.request().query(query)
+    }).then(result => {
+        let rows = result.recordset
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.status(200).json(rows);
+        sql.close();
+    }).catch(err => {
+        res.status(500).send({ message: "${err}"})
+        sql.close();
     })
-
-}
-
-function SearchPeople(req, res) {
-
-    sql.connect(config, function(err) {
-        if (err) {
-            console.log(err);
-        }
-        var request = new sql.Request();
-        var query = 'SELECT * FROM Persona WHERE idPersona = ' + req.params.id;
-        request.query(query, function(err, result) {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            var data = {};
-            data = result.recordset;
-            res.send(data);
-            sql.close();
-        })
-    })
-}
-
-function cmdSQL(query, res) {
-    sql.connect(config, function(err) {
-        if (err) {
-            console.log("Error while connecting database :- " + err);
-            res.send(err);
-        } else {
-            // create Request object
-            var request = new sql.Request();
-            // query to the database
-            request.query(query, function(err, resp) {
-                if (err) {
-                    console.log("Error while querying database :- " + err);
-                    res.send(err);
-                } else {
-                    res.send(resp);
-                }
-
-                sql.close();
-            });
-        }
-    });
 }
 
 
 module.exports = {
     getPeoples: (req, res) => {
-        listPeople(res);
+        var query = "SELECT * FROM Persona";
+        cmdSQL(query, res);
     },
     getPeople: (req, res) => {
-        SearchPeople(req, res);
+        var query = 'SELECT * FROM Persona WHERE idPersona = ' + req.params.id;
+        cmdSQL(query, res);
     },
     addPeople: (req, res) => {
 

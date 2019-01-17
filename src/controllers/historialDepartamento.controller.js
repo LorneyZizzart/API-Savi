@@ -1,27 +1,19 @@
 var sql = require('mssql');
 const config = require('../db/config.db');
 
-function cmdSQL(query, res) {
-    sql.connect(config, function(err) {
-        if (err) {
-            console.log("Error while connecting database :- " + err);
-            res.send(err);
-        } else {
-            // create Request object
-            var request = new sql.Request();
-            // query to the database
-            request.query(query, function(err, resp) {
-                if (err) {
-                    console.log("Error while querying database :- " + err);
-                    res.send(err);
-                } else {
-                    res.send(resp.recordset);
-                }
+async function cmdSQL(query, res) {
 
-                sql.close();
-            });
-        }
-    });
+    new sql.ConnectionPool(config).connect().then(pool => {
+        return pool.request().query(query)
+    }).then(result => {
+        let rows = result.recordset
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.status(200).json(rows);
+        sql.close();
+    }).catch(err => {
+        res.status(500).send({ message: "${err}"})
+        sql.close();
+    })
 }
 
 function dateNow(){

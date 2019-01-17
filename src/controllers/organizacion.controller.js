@@ -1,38 +1,61 @@
 var sql = require('mssql');
 const config = require('../db/config.db');
 
-function cmdSQL(query, res) {
-    sql.connect(config, function(err) {
-        if (err) {
-            console.log("Error while connecting database :- " + err);
-            res.send(err);
-        } else {
-            // create Request object
-            var request = new sql.Request();
-            // query to the database
-            request.query(query, function(err, resp) {
-                if (err) {
-                    console.log("Error while querying database :- " + err);
-                    res.send(err);
-                } else {
-                    res.send(resp);
-                }
+async function cmdSQL(query, res) {
 
-                sql.close();
-            });
-        }
-    });
+    new sql.ConnectionPool(config).connect().then(pool => {
+        return pool.request().query(query)
+    }).then(result => {
+        let rows = result.recordset
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.status(200).json(rows);
+        sql.close();
+    }).catch(err => {
+        res.status(500).send({ message: "${err}"})
+        sql.close();
+    })
+}
+
+function dateNow(){
+    var fechaRegistro = new Date();
+        var dd = fechaRegistro.getDate();
+        var mm = fechaRegistro.getMonth() + 1;
+        var yyyy = fechaRegistro.getFullYear();
+
+        if (dd < 10) {
+            dd = '0' + dd;
+          }
+          
+          if (mm < 10) {
+            mm = '0' + mm;
+          }
+
+          return fechaRegistro = dd+'/'+mm+'/'+yyyy;
 }
 
 
 module.exports = {
-    getOrganizacion: (req, res) => {},
-    getOrganizacion: (req, res) => {},
+    getOrganizacion: (req, res) => {
+        //Por el momento esta aqui los departamento que no tienen Jefe de Departamento
+        var query = "SELECT idDepartamento, nombre as nombreDepartamento, fechaRegistro, estado as estadoDepartamento FROM Departamento";
+        //var query = "SELECT de.idDepartamento, de.nombre FROM Departamento de , Organizacion org " +
+          //              "WHERE NOT EXISTS (SELECT * FROM Departamento de , Organizacion org WHERE de.idDepartamento = org.idDepartamento)";
+         cmdSQL(query, res);
+    },
+    getOrganizaciones: (req, res) => {},
+    getAdministracion: (req, res) => {
+
+        var query = "SELECT pe.idPersona, us.idUsuario, us.idRol, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, " + 
+                   "pe.estado as estadoPersona, us.estado as estadoUsuario, us.usuario, us.password " +
+		         "FROM Persona pe, Usuario us WHERE pe.idPersona = us.idPersona AND us.idRol = 4"
+        cmdSQL(query, res);
+    },
     addOrganizacion: (req, res) => {
 
         var query = "INSERT INTO Organizacion VALUES (" +
             req.body.idDepartamento + ", " +
-            req.body.idPersona + ", '2018/11/20', 1)";
+            req.body.idPersona + ", '" +
+            dateNow() + "', 1)";
         cmdSQL(query, res);
     },
     updateOrganizacion: (req, res) => {},

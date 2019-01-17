@@ -36,20 +36,21 @@ function dateNow(){
 
 module.exports = {
     getDepartamentos: (req, res) => {
-        var query = "SELECT Distinct co.idDepartamento, COUNT(co.idPersona) OVER (PARTITION BY co.idDepartamento ) AS cantidadEstudiante, " +
+        var query = "SELECT Distinct de.idDepartamento, " +
                     "pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, " +
-                    "org.idOrganizacion, org.fechaRegistro as fechaRegistroOrganizacion, org.estado as estadoOrganizacion, " + 
-                    "de.nombre as nombreDepartamento, de.fechaRegistro as fechaRegistroDepartamento, de.estado as estadoDepartamento," + 
+                    "org.idOrganizacion, org.fechaRegistro as fechaRegistroOrganizacion, org.estado as estadoOrganizacion, " +
+                    "de.nombre as nombreDepartamento, de.fechaRegistro as fechaRegistroDepartamento, de.estado as estadoDepartamento, " +
                     "hd.costoHora, hd.limiteEstudiante, hd.fechaRegistro as fechaRegistroHistorialDep, hd.estado as estadoHistorialDepartamento " +
-                    "FROM Persona pe, Organizacion org, Departamento de, HistorialDepartamento hd, Convenio co " +
+                    "FROM Persona pe, Organizacion org, Departamento de, HistorialDepartamento hd " +
                     "WHERE pe.idPersona = org.idPersona " +
-                    "AND org.idDepartamento = de.idDepartamento " + 
+                    "AND org.idDepartamento = de.idDepartamento " +
                     "AND de.idDepartamento = hd.idDepartamento " +
-                    "AND de.idDepartamento = co.idDepartamento ORDER BY de.nombre ASC";
+                    "ORDER BY de.nombre ASC";
         cmdSQL(query, res);
     },
     getDepartamento: (req, res) => {
         var query = 'SELECT * FROM Departamento WHERE idDepartamento = ' + req.params.id;
+
         cmdSQL(query, res);
     },
     addDepartamento: (req, res) => {

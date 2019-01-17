@@ -11,7 +11,8 @@ const becaRouter = require('./routes/beca.router');
 const departamentoRouter = require('./routes/departamento.router');
 const areaRouter = require('./routes/area.router');
 const tipoPersonaRouter = require('./routes/tipoPersona.router');
-const historialDepartamento = require('./routes/historialDepartamento.router')
+const historialDepartamento = require('./routes/historialDepartamento.router');
+const organizacionDepartamento = require('./routes/organizacion.router');
 
 //setting
 //app.set('views', path.join(__dirname, 'views'));
@@ -41,6 +42,7 @@ app.use('/departamento', departamentoRouter)
 app.use('/area', areaRouter)
 app.use('/tipoPersona', tipoPersonaRouter)
 app.use('/historialDepartamento', historialDepartamento)
+app.use('/organizacionDepartamento', organizacionDepartamento)
 
 //static files
 //start server

@@ -1,8 +1,12 @@
 const organizacionRouter = require('express').Router();
 
-const { addOrganizacion } = require('../controllers/organizacion.controller');
+const { getOrganizacion, addOrganizacion, getAdministracion } = require('../controllers/organizacion.controller');
 
 organizacionRouter.route('/')
+    .get(getOrganizacion)
     .post(addOrganizacion);
+
+organizacionRouter.route('/administracion')
+    .get(getAdministracion)
 
 module.exports = organizacionRouter;

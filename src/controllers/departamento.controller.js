@@ -30,7 +30,7 @@ function dateNow(){
             mm = '0' + mm;
           }
 
-          return fechaRegistro = dd+'/'+mm+'/'+yyyy;
+          return fechaRegistro = yyyy+'/'+mm+'/'+dd;
 }
 
 
@@ -54,7 +54,7 @@ module.exports = {
         cmdSQL(query, res);
     },
     addDepartamento: (req, res) => {
-        
+        console.log("'"+dateNow()+"'");
         var query = "INSERT INTO Departamento VALUES ( '" +
             req.body.nombreDepartamento + "', '" +
             dateNow() + "', 1)";

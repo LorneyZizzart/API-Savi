@@ -30,7 +30,7 @@ function dateNow(){
             mm = '0' + mm;
           }
 
-          return fechaRegistro = dd+'/'+mm+'/'+yyyy;
+          return fechaRegistro = yyyy+'/'+mm+'/'+dd;
 }
 
 

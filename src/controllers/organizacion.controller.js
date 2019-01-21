@@ -36,6 +36,7 @@ function dateNow(){
 
 module.exports = {
     getOrganizacion: (req, res) => {
+        //No funciona del todo bien tiene que listar los departamentos sin jefes pero muestra todos los departametos
         //Por el momento esta aqui los departamento que no tienen Jefe de Departamento
         var query = "SELECT idDepartamento, nombre as nombreDepartamento, fechaRegistro, estado as estadoDepartamento FROM Departamento";
         //var query = "SELECT de.idDepartamento, de.nombre FROM Departamento de , Organizacion org " +

@@ -33,8 +33,6 @@ function dateNow(){
           return fechaRegistro = yyyy+'/'+mm+'/'+dd;
 }
 
-
-
 module.exports = {
     getAreas: (req, res) => {
         var query = "SELECT idArea, idDepartamento, nombre as nombreArea, fechaRegistro as fechaRegistroArea, estado as estadoArea FROM Area ORDER BY nombre ASC";
@@ -68,6 +66,13 @@ module.exports = {
         var query = "UPDATE Area SET " +
             "nombre = '" + req.body.nombreArea + "', " +
             "fechaRegistro = '" + dateNow() + "', " +
+            "estado = " + req.body.estadoArea +
+            " WHERE idArea = " + req.params.idArea;
+
+        cmdSQL(query, res);
+    },
+    updateEstadoArea: (req, res) => {
+        var query = "UPDATE Area SET " +
             "estado = " + req.body.estadoArea +
             " WHERE idArea = " + req.params.idArea;
 

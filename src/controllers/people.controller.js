@@ -1,11 +1,5 @@
 var sql = require('mssql');
-
-var config = {
-    user: 'sa',
-    password: "password",
-    server: "127.0.0.1",
-    database: "Savi"
-};
+const config = require('../db/config.db');
 
 async function cmdSQL(query, res) {
     new sql.ConnectionPool(config).connect().then(pool => {

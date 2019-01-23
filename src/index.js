@@ -13,6 +13,7 @@ const areaRouter = require('./routes/area.router');
 const tipoPersonaRouter = require('./routes/tipoPersona.router');
 const historialDepartamento = require('./routes/historialDepartamento.router');
 const organizacionDepartamento = require('./routes/organizacion.router');
+const registroHora = require('./routes/registroHora.router');
 
 //setting
 //app.set('views', path.join(__dirname, 'views'));
@@ -43,6 +44,7 @@ app.use('/area', areaRouter)
 app.use('/tipoPersona', tipoPersonaRouter)
 app.use('/historialDepartamento', historialDepartamento)
 app.use('/organizacionDepartamento', organizacionDepartamento)
+app.use('/registroHora', registroHora)
 
 //static files
 //start server

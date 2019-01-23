@@ -76,6 +76,11 @@ module.exports = {
 
         cmdSQL(query, res);
     },
+    updateEstadoConvenio: (req, res) => {
+        var query = "UPDATE Convenio SET estado = " + req.body.estadoConvenio + 
+                    " WHERE idConvenio = " + req.params.id;
+        cmdSQL(query, res);
+    },
     deleteConvenio: (req, res) => {
 
         var query = "DELETE FROM Convenio WHERE idConvenio = " + req.params.id;

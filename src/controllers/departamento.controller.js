@@ -35,8 +35,9 @@ function dateNow(){
 
 
 module.exports = {
+    //se utiliza para realizar el convenio
     getAllDepartamentos: (req, res) =>{
-        var query = "SELECT idDepartamento, nombre as nombreDepartamento, fechaRegistro, estado as estadoDepartamento FROM Departamento";
+        var query = "SELECT idDepartamento, nombre as nombreDepartamento, fechaRegistro, estado as estadoDepartamento FROM Departamento WHERE estado = 1 ORDER BY nombre ASC";
         cmdSQL(query, res);
     },
     getDepartamentos: (req, res) => {
@@ -53,8 +54,18 @@ module.exports = {
                     "ORDER BY de.nombre ASC";
         cmdSQL(query, res);
     },
+    //Obtener todos los datos de un departamento -> se lo utiliza en informe de hoy
     getDepartamento: (req, res) => {
-        var query = 'SELECT * FROM Departamento WHERE idDepartamento = ' + req.params.id;
+        var query = "SELECT Distinct de.idDepartamento, " +
+                    "pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
+                    "org.idOrganizacion, org.fechaRegistro as fechaRegistroOrganizacion, org.estado as estadoOrganizacion, " +
+                    "de.nombre as nombreDepartamento, de.fechaRegistro as fechaRegistroDepartamento, de.estado as estadoDepartamento, " +
+                    "hd.costoHora, hd.limiteEstudiante, hd.fechaRegistro as fechaRegistroHistorialDep, hd.estado as estadoHistorialDepartamento " +
+                    "FROM Persona pe, Organizacion org, Departamento de, HistorialDepartamento hd " +
+                    "WHERE pe.idPersona = org.idPersona " +
+                    "AND org.idDepartamento = de.idDepartamento " +
+                    "AND de.idDepartamento = hd.idDepartamento " +
+                    'AND de.idDepartamento = ' + req.params.id;
 
         cmdSQL(query, res);
     },

@@ -25,15 +25,13 @@ function dateNow(){
         var min = fechaRegistro.getMinutes();
         var ss = fechaRegistro.getSeconds();
 
-        if (dd < 10) {
-            dd = '0' + dd;
-          }
-          
-          if (mm < 10) {
-            mm = '0' + mm;
-          }
+        if (dd < 10) { dd = '0' + dd; }
+        if (mm < 10) { mm = '0' + mm; }
+        if (hh < 10) { hh = '0' + hh;   }
+        if (min < 10) { min = '0' + min;   }
+        if (ss < 10) { ss = '0' + ss;   }
 
-          return fechaRegistro = yyyy+'/'+mm+'/'+dd+' '+hh+':'+min+':'+ss;
+        return fechaRegistro = yyyy+'/'+mm+'/'+dd+' '+hh+':'+min+':'+ss+'.000';
 }
 
 function date(days){
@@ -101,7 +99,7 @@ module.exports = {
         "AND co.idDepartamento = de.idDepartamento " +
         "AND co.idConvenio = aa.idConvenio " +
         "AND aa.idArea = ar.idArea " +
-        "AND de.nombre = '" + req.params.nameDept + "'";
+        "AND de.idDepartamento = " + req.params.idDepto ;
         cmdSQL(query, res);
     },
     getRegistroHorasYesterday: (req, res) =>{
@@ -130,18 +128,27 @@ module.exports = {
         "AND co.idDepartamento = de.idDepartamento " +
         "AND co.idConvenio = aa.idConvenio " +
         "AND aa.idArea = ar.idArea " +
-        "AND de.nombre = '" + req.params.nameDept + "'";
+        "AND de.idDepartamento = " + req.params.idDepto ;
         cmdSQL(query, res);
     },
+    //para marcar hora de entrada
     addRegistroHora: (req, res) => {
         var observacion = null;
         if(req.body.observacionRegistroHora != null){
             observacion = "'" + req.body.observacionRegistroHora+"'";
         }
-        var query = "INSERT INTO RegistroHora VALUES(" +
+        var query = "INSERT INTO RegistroHora VALUES( " +
             req.body.idConvenio + ", '" +
             dateNow() + "', null, " +
             observacion + ", 0, 1)";
+
+        cmdSQL(query, res);
+    },
+    //para marcar hora de salida
+    updateRegistroHoraSalida: (req, res) => {
+        var query = "UPDATE RegistroHora SET " +
+            "fechaHoraSalida = '" + dateNow() + "' " +
+            "WHERE idRegistroHora = " + req.params.id;
 
         cmdSQL(query, res);
     },

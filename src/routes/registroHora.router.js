@@ -1,17 +1,18 @@
 const registroHoraRouter = require('express').Router();
 
-const { getRegistroHorasNow, getRegistroHorasYesterday, addRegistroHora, deleteRegistroHora } = require('../controllers/registroHora.controller');
+const { getRegistroHorasNow, getRegistroHorasYesterday, addRegistroHora, updateRegistroHoraSalida, deleteRegistroHora } = require('../controllers/registroHora.controller');
 
 registroHoraRouter.route('/')
     .post(addRegistroHora);
 
 registroHoraRouter.route('/:id')
-    .delete(deleteRegistroHora);
+    .delete(deleteRegistroHora)
+    .put(updateRegistroHoraSalida);
 
-registroHoraRouter.route('/dateNow/:nameDept')
+registroHoraRouter.route('/dateNow/:idDepto')
     .get(getRegistroHorasNow);
 
-registroHoraRouter.route('/dateYesterday/:nameDept')
+registroHoraRouter.route('/dateYesterday/:idDepto')
     .get(getRegistroHorasYesterday);
 
 module.exports = registroHoraRouter;

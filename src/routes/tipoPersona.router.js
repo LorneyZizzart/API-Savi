@@ -1,6 +1,6 @@
 const tipoPersonaRouter = require('express').Router();
 
-const { getTipoPersona, getMaxIdPersona, addTipoPersona } = require('../controllers/tipoPersona.controller');
+const { getTipoPersona, getEstudianteDepartamento, getMaxIdPersona, addTipoPersona } = require('../controllers/tipoPersona.controller');
 
 tipoPersonaRouter.route('/')
     .get(getMaxIdPersona) /*Para enviar el max idPersona ()OJO*/
@@ -8,6 +8,9 @@ tipoPersonaRouter.route('/')
 
 tipoPersonaRouter.route('/:idRol')
     .get(getTipoPersona);
+
+tipoPersonaRouter.route('/estDep/:idDep')
+    .get(getEstudianteDepartamento);
 
 
 module.exports = tipoPersonaRouter;

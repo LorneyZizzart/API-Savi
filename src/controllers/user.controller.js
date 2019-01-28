@@ -16,13 +16,31 @@ async function cmdSQL(query, res) {
 
 }
 
+function dateNow(){
+    var fechaRegistro = new Date();
+        var dd = fechaRegistro.getDate();
+        var mm = fechaRegistro.getMonth() + 1;
+        var yyyy = fechaRegistro.getFullYear();
+        var hh = fechaRegistro.getHours();
+        var min = fechaRegistro.getMinutes();
+        var ss = fechaRegistro.getSeconds();
+
+        if (dd < 10) { dd = '0' + dd; }
+        if (mm < 10) { mm = '0' + mm; }
+        if (hh < 10) { hh = '0' + hh;   }
+        if (min < 10) { min = '0' + min;   }
+        if (ss < 10) { ss = '0' + ss;   }
+
+        return fechaRegistro = yyyy+'/'+mm+'/'+dd+' '+hh+':'+min+':'+ss+'.000';
+}
+
 
 module.exports = {
     getUsers: (req, res) => {
         var query = "SELECT pe.idPersona, us.idUsuario, us.idRol, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, " +
         "pe.estado as estadoPersona, us.estado as estadoUsuario, us.usuario, us.password " +
         "FROM Persona pe, Usuario us " +
-        "WHERE pe.idPersona = us.idPersona ORDER BY pe.primerNombre ASC"
+        "WHERE pe.idPersona = us.idPersona AND us.delet IS NULL ORDER BY pe.primerNombre ASC"
         cmdSQL(query, res);
     },
     getUser: (req, res) => {
@@ -35,7 +53,8 @@ module.exports = {
             req.body.idPersona + "," +
             req.body.idRol + ", '" +
             req.body.usuario + "', '" +
-            req.body.password + "', 1)";
+            req.body.password + "', 1, '" +
+            dateNow() + "', null, null)";
 
         cmdSQL(query, res);
     },
@@ -45,14 +64,25 @@ module.exports = {
             "idRol =" + req.body.idRol + ", " +
             "usuario = '" + req.body.usuario + "', " +
             "password = '" + req.body.password + "', " +
-            "estado = " + req.body.estado +
-            " WHERE idUsuario = " + req.params.id;
+            "estado = " + req.body.estado + ", " +
+            "edit = '" + dateNow() + "' "+
+            "WHERE idUsuario = " + req.params.id;
+
+        cmdSQL(query, res);
+    },
+    updateEstadoUser: (req, res) => {
+        var query = "UPDATE Usuario SET " +
+            "estado = " + req.body.estado + ", " +
+            "edit = '" + dateNow() + "' "+
+            "WHERE idUsuario = " + req.params.id;
 
         cmdSQL(query, res);
     },
     deleteUser: (req, res) => {
 
-        var query = "DELETE FROM Usuario WHERE idUsuario = " + req.params.id;
+        var query = "UPDATE Usuario SET " +
+                    "delet = '" + dateNow() + "' "+
+                    "WHERE idUsuario = " + req.params.id;
 
         cmdSQL(query, res);
     }

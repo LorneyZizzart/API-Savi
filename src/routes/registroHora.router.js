@@ -12,7 +12,7 @@ registroHoraRouter.route('/:id')
 registroHoraRouter.route('/dateNow/:idDepto')
     .get(getRegistroHorasNow);
 
-registroHoraRouter.route('/dateYesterday/:idDepto')
+registroHoraRouter.route('/dateYest/informe/:idDepto')
     .get(getRegistroHorasYesterday);
 
 module.exports = registroHoraRouter;

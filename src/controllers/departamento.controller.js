@@ -21,23 +21,24 @@ function dateNow(){
         var dd = fechaRegistro.getDate();
         var mm = fechaRegistro.getMonth() + 1;
         var yyyy = fechaRegistro.getFullYear();
+        var hh = fechaRegistro.getHours();
+        var min = fechaRegistro.getMinutes();
+        var ss = fechaRegistro.getSeconds();
 
-        if (dd < 10) {
-            dd = '0' + dd;
-          }
-          
-          if (mm < 10) {
-            mm = '0' + mm;
-          }
+        if (dd < 10) { dd = '0' + dd; }
+        if (mm < 10) { mm = '0' + mm; }
+        if (hh < 10) { hh = '0' + hh;   }
+        if (min < 10) { min = '0' + min;   }
+        if (ss < 10) { ss = '0' + ss;   }
 
-          return fechaRegistro = yyyy+'/'+mm+'/'+dd;
+        return fechaRegistro = yyyy+'/'+mm+'/'+dd+' '+hh+':'+min+':'+ss+'.000';
 }
 
 
 module.exports = {
     //se utiliza para realizar el convenio
     getAllDepartamentos: (req, res) =>{
-        var query = "SELECT idDepartamento, nombre as nombreDepartamento, fechaRegistro, estado as estadoDepartamento FROM Departamento WHERE estado = 1 ORDER BY nombre ASC";
+        var query = "SELECT idDepartamento, nombre as nombreDepartamento, fechaRegistro, estado as estadoDepartamento FROM Departamento WHERE estado = 1 AND delet IS NULL ORDER BY nombre ASC";
         cmdSQL(query, res);
     },
     getDepartamentos: (req, res) => {
@@ -51,6 +52,7 @@ module.exports = {
                     "WHERE pe.idPersona = org.idPersona " +
                     "AND org.idDepartamento = de.idDepartamento " +
                     "AND de.idDepartamento = hd.idDepartamento " +
+                    "AND de.delet IS NULL " +
                     "ORDER BY de.nombre ASC";
         cmdSQL(query, res);
     },
@@ -73,28 +75,31 @@ module.exports = {
         console.log("'"+dateNow()+"'");
         var query = "INSERT INTO Departamento VALUES ( '" +
             req.body.nombreDepartamento + "', '" +
-            dateNow() + "', 1)";
+            dateNow() + "', 1, null, null)";
         cmdSQL(query, res);
     },
     updateDepartamento: (req, res) => {
 
         var query = "UPDATE Departamento SET " +
             "nombre = '" + req.body.nombre + "', " +
-            "fechaRegistro = '" + dateNow() + "', " +
-            "estado = " + req.body.estado +
+            "estado = " + req.body.estado + ", " +
+            "edit = '" + dateNow() + "' "+
             " WHERE idDepartamento = " + req.params.id;
 
         cmdSQL(query, res);
     },
     updateEstadoDepartamento: (req, res) => {
         var query = "UPDATE Departamento SET " +
-                    "estado = " + req.body.estadoDepartamento + 
-                    " WHERE idDepartamento = " + req.params.id;
+                    "estado = " + req.body.estadoDepartamento + ", " +
+                    "edit = '" + dateNow() + "' "+
+                    "WHERE idDepartamento = " + req.params.id;
         cmdSQL(query, res);
     },
     deleteDepartamento: (req, res) => {
 
-        var query = "DELETE FROM Departamento WHERE idDepartamento = " + req.params.id;
+        var query = "UPDATE Departamento SET " +
+            "delet = '" + dateNow() + "' "+
+            "WHERE idDepartamento = " + req.params.id;
 
         cmdSQL(query, res);
     }

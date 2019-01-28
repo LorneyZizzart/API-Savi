@@ -104,7 +104,7 @@ module.exports = {
     },
     getRegistroHorasYesterday: (req, res) =>{
 
-        var query = "SELECT rh.idRegistroHora, rh.idConvenio, TRY_CONVERT(date, rh.fechaHoraEntrada) as fechaEntrada, " +
+        var query = "SELECT rh.idRegistroHora, rh.idConvenio, TRY_CONVERT(date, rh.fechaHoraEntrada) as fechaEntrada, TRY_CONVERT(date, rh.fechaHoraSalida) as fechaSalida, " +
         "DATEPART(yy, rh.fechaHoraEntrada) as yearEntrada, " +
         "DATEPART(mm, rh.fechaHoraEntrada) as monthEntrada, " +
         "DATEPART(dd, rh.fechaHoraEntrada) as dayEntrada, " +

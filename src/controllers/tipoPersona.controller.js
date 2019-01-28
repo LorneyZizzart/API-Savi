@@ -39,7 +39,8 @@ module.exports = {
         var query = "SELECT pe.idPersona, us.idUsuario, us.idRol, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.ci, pe.carrera, pe.semestre, pe.nacionalidad, pe.direccion, pe.celular, pe.fechaNacimiento, " +
                     "pe.estado as estadoPersona, us.estado as estadoUsuario " +
                     "FROM Persona pe, Usuario us " +
-                    "WHERE pe.idPersona = us.idPersona "+
+                    "WHERE pe.idPersona = us.idPersona " +
+                    "AND us.delet IS NULL " +
                     "AND us.idRol = " + req.params.idRol;
         cmdSQL(query, res);
     },
@@ -55,6 +56,8 @@ module.exports = {
                     "AND de.idDepartamento = " + req.params.idDep +
                     " AND us.estado = 1 " +
                     "AND co.estado = 1 " +
+                    "AND us.delet IS NULL " +
+                    "AND co.delet IS NULL " +
                     "ORDER BY pe.primerNombre ASC";
         cmdSQL(query, res);
     },
@@ -62,36 +65,6 @@ module.exports = {
         var query = "SELECT max(idPersona) as idPersona FROM Persona";
         cmdSQL(query, res);
     },
-    addTipoPersona: (req, res) => {
-
-        var query = "INSERT INTO Persona VALUES('" +
-            req.body.primerNombre + "', '" +
-            req.body.segundoNombre + "', '" +
-            req.body.primerApellido + "', '" +
-            req.body.segundoApellido + "', '" +
-            req.body.direccion + "', '" +
-            req.body.nacionalidad + "', '" +
-            req.body.fechaNacimiento + "', '" +
-            req.body.ci + "', " +
-            req.body.celular + ", 1)";
-
-        cmdSQL(query, res);
-        sql.close();
-        var query2 = "INSERT INTO TipoPersona VALUES (" +
-            req.body.idTipo + ", " +
-            req.body.idPersona + ", 1)";
-
-        cmdSQL(query2, res);
-    },
-    updateTipoPersona: (req, res) => {
-        //codigo no valido
-        var query = "UPDATE Usuario SET " +
-            "idRol =" + req.body.idRol + ", " +
-            "usuario = '" + req.body.usuario + "', " +
-            "password = '" + req.body.password + "', " +
-            "estado = " + req.body.estado +
-            " WHERE idUsuario = " + req.params.id;
-
-        cmdSQL(query, res);
-    }
+    addTipoPersona: (req, res) => {},
+    updateTipoPersona: (req, res) => { }
 };

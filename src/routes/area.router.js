@@ -1,7 +1,8 @@
 const areaRouter = require('express').Router();
 
 const { getAreas, getArea, getAreasDepartamento, addArea, updateArea, 
-        updateEstadoArea, deleteArea, getAsignacionArea, addAsigancionArea 
+        updateEstadoArea, deleteArea, getAsignacionArea, addAsigancionArea,
+        updateAsignacionArea, deleteAsignacionArea
         } = require('../controllers/area.controller');
 
 areaRouter.route('/')
@@ -23,7 +24,9 @@ areaRouter.route('/asignacionArea/crud')
     .post(addAsigancionArea);
 
 areaRouter.route('/asignacionArea/crud/:idDept')
-    .get(getAsignacionArea);
+    .get(getAsignacionArea)
+    .put(updateAsignacionArea)
+    .delete(deleteAsignacionArea);
 
 
 module.exports = areaRouter;

@@ -46,12 +46,16 @@ module.exports = {
     },
     //Listar los estudiantes x departamento que estan activos 
     getEstudianteDepartamento: (req, res) => {
-        var query = "SELECT pe.idPersona, us.idUsuario, us.idRol, co.idConvenio, de.idDepartamento, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, " +
-                    "pe.estado as estadoPersona, us.estado as estadoUsuario " +
-                    "FROM Persona pe, Usuario us, Convenio co, Departamento de " +
+        var query = "SELECT pe.idPersona, us.idUsuario, us.idRol, co.idConvenio, de.idDepartamento, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
+                    "us.estado as estadoUsuario, " +
+                    "de.idDepartamento, de.nombre as departamento, " +
+                    "be.idBeca, be.nombre as beca, " +
+                    "co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio " +
+                    "FROM Persona pe, Usuario us, Convenio co, Departamento de, Beca be " +
                     "WHERE pe.idPersona = us.idPersona " +
                     "AND pe.idPersona = co.idPersona " +
                     "AND co.idDepartamento = de.idDepartamento " +
+                    "AND co.idBeca = be.idBeca " + 
                     "AND us.idRol = 5 " +
                     "AND de.idDepartamento = " + req.params.idDep +
                     " AND us.estado = 1 " +

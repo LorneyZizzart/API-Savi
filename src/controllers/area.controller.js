@@ -90,7 +90,7 @@ module.exports = {
     },
     //LISTAR LOS ESTUDIANTES X DEPARTAMENTO
     getAsignacionArea: (req, res) => {
-        var query = "SELECT aa.idConvenio, aa.idArea, aa.fechaRegistro, aa.estado, " +
+        var query = "SELECT aa.idAsignacionArea, aa.idConvenio, aa.idArea, aa.fechaRegistro as fechaRegistroAsignacion, aa.estado as estadoAsignacion, " +
                     "de.idDepartamento, " +
                     "ar.nombre as nombreArea, " +
                     "pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido " +
@@ -100,7 +100,8 @@ module.exports = {
                     "AND de.idDepartamento = ar.idDepartamento " +
                     "AND ar.idArea = aa.idArea " +
                     "AND aa.idConvenio = co.idConvenio " +
-                    "AND de.idDepartamento = " + req.params.idDept + " " + 
+                    "AND aa.delet IS NULL " +
+                    "AND de.idDepartamento = " + req.params.idDept + " AND co.estado = 1 AND co.delet IS NULL " + 
                     "ORDER BY ar.nombre ASC";
 
         cmdSQL(query, res);
@@ -112,5 +113,20 @@ module.exports = {
         dateNow() + "', 1, null, null)";
 
         cmdSQL(query, res);
+    },
+    updateAsignacionArea: (req, res) => {
+        var query = "UPDATE AsignacionArea SET " +
+        "estado = " + req.body.estadoAsignacion + ", " +
+        "edit = '" + dateNow() + "' " +
+        "WHERE idAsignacionArea = " + req.params.idDept;
+
+    cmdSQL(query, res);
+    },
+    deleteAsignacionArea: (req, res) => {
+        var query = "UPDATE AsignacionArea SET " +
+            "delet = '" + dateNow() + "' " +
+            "WHERE idAsignacionArea = " + req.params.idDept;
+
+    cmdSQL(query, res);
     }
 };

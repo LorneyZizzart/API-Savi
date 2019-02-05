@@ -14,6 +14,10 @@ const tipoPersonaRouter = require('./routes/tipoPersona.router');
 const historialDepartamento = require('./routes/historialDepartamento.router');
 const organizacionDepartamento = require('./routes/organizacion.router');
 const registroHora = require('./routes/registroHora.router');
+const informeJefe = require('./routes/informeJefe.router');
+const informeEstudiante = require('./routes/informeEstudiante.router');
+const informeFinanzas = require('./routes/informeFinanzas.router');
+const acreedorRouter = require('./routes/acreedor.router');
 
 //setting
 //app.set('views', path.join(__dirname, 'views'));
@@ -45,6 +49,10 @@ app.use('/tipoPersona', tipoPersonaRouter)
 app.use('/historialDepartamento', historialDepartamento)
 app.use('/organizacionDepartamento', organizacionDepartamento)
 app.use('/registroHora', registroHora)
+app.use('/informeJefe', informeJefe)
+app.use('/informeEstudiante', informeEstudiante)
+app.use('/informeFinanzas', informeFinanzas)
+app.use('/acreedor', acreedorRouter)
 
 //static files
 //start server

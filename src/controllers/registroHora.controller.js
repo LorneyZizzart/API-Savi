@@ -199,7 +199,7 @@ module.exports = {
                     "DATEPART(hh, rh.fechaHoraSalida) as horaSalida, " +
                     "DATEPART(n, rh.fechaHoraSalida) as minutoSalida, " +
                     "DATEPART(ss, rh.fechaHoraSalida) as segundoSalida, " +
-                    "rh.Observacion as observacionRegistroHora, rh.aprovado as aprovadoRegistroHora, rh.estado as estadoRegistroHora, " +
+                    "rh.observacion as observacionRegistroHora, rh.aprobado as aprobadoRegistroHora, rh.aprobadoFinanzas, " +
                     "pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, " +
                     "de.nombre as nombreDepartamento " +
                     "FROM RegistroHora rh, Persona pe, Convenio co, Departamento de " +
@@ -209,7 +209,7 @@ module.exports = {
                     "AND co.idDepartamento = de.idDepartamento " +
                     "AND rh.delet IS NULL " +
                     "AND co.delet IS NULL " +
-                    "AND de.idDepartamento = " + req.params.idDepto ;
+                    "AND de.idDepartamento = " + req.params.idDepto + "ORDER BY pe.primerApellido ASC";
         cmdSQL(query, res);
     },
     getRegistroHorasYesterday: (req, res) =>{
@@ -227,7 +227,7 @@ module.exports = {
                     "DATEPART(hh, rh.fechaHoraSalida) as horaSalida, " +
                     "DATEPART(n, rh.fechaHoraSalida) as minutoSalida, " +
                     "DATEPART(ss, rh.fechaHoraSalida) as segundoSalida, " +
-                    "rh.Observacion as observacionRegistroHora, rh.aprovado as aprovadoRegistroHora, rh.estado as estadoRegistroHora, " +
+                    "rh.Observacion as observacionRegistroHora, rh.aprobado as aprobadoRegistroHora, rh.aprobadoFinanzas, " +
                     "pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, " +
                     "de.nombre as nombreDepartamento " +
                     "FROM RegistroHora rh, Persona pe, Convenio co, Departamento de " +
@@ -237,7 +237,7 @@ module.exports = {
                     "AND co.idDepartamento = de.idDepartamento " +
                     "AND rh.delet IS NULL " +
                     "AND co.delet IS NULL " +
-                    "AND de.idDepartamento = " + req.params.idDepto ;
+                    "AND de.idDepartamento = " + req.params.idDepto + " ORDER BY pe.primerApellido ASC";
         cmdSQL(query, res);
     },
     getRegistroHorasWeek: (req, res) => {
@@ -254,7 +254,7 @@ module.exports = {
                     "DATEPART(hh, rh.fechaHoraSalida) as horaSalida, " +
                     "DATEPART(n, rh.fechaHoraSalida) as minutoSalida, " +
                     "DATEPART(ss, rh.fechaHoraSalida) as segundoSalida, " +
-                    "rh.Observacion as observacionRegistroHora, rh.aprovado as aprovadoRegistroHora, rh.estado as estadoRegistroHora, " +
+                    "rh.Observacion as observacionRegistroHora, rh.aprobado as aprobadoRegistroHora, rh.aprobadoFinanzas, " +
                     "pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, " +
                     "de.nombre as nombreDepartamento " +
                     "FROM RegistroHora rh, Persona pe, Convenio co, Departamento de " +
@@ -264,7 +264,7 @@ module.exports = {
                     "AND co.idDepartamento = de.idDepartamento " +
                     "AND rh.delet IS NULL " +
                     "AND co.delet IS NULL " +
-                    "AND de.idDepartamento = " + req.params.idDepto ;
+                    "AND de.idDepartamento = " + req.params.idDepto + "ORDER BY pe.primerApellido ASC";
         cmdSQL(query, res);
     },
     getRegistroHorasMonth: (req, res) => {
@@ -281,7 +281,7 @@ module.exports = {
                     "DATEPART(hh, rh.fechaHoraSalida) as horaSalida, " +
                     "DATEPART(n, rh.fechaHoraSalida) as minutoSalida, " +
                     "DATEPART(ss, rh.fechaHoraSalida) as segundoSalida, " +
-                    "rh.Observacion as observacionRegistroHora, rh.aprovado as aprovadoRegistroHora, rh.estado as estadoRegistroHora, " +
+                    "rh.Observacion as observacionRegistroHora, rh.aprobado as aprobadoRegistroHora, rh.aprobadoFinanzas, " +
                     "pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, " +
                     "de.nombre as nombreDepartamento " +
                     "FROM RegistroHora rh, Persona pe, Convenio co, Departamento de " +
@@ -291,7 +291,7 @@ module.exports = {
                     "AND co.idDepartamento = de.idDepartamento " +
                     "AND rh.delet IS NULL " +
                     "AND co.delet IS NULL " +
-                    "AND de.idDepartamento = " + req.params.idDepto ;
+                    "AND de.idDepartamento = " + req.params.idDepto + "ORDER BY pe.primerApellido ASC";
         cmdSQL(query, res);
     },
     //para marcar hora de entrada
@@ -303,7 +303,7 @@ module.exports = {
         var query = "INSERT INTO RegistroHora VALUES( " +
             req.body.idConvenio + ", '" +
             dateNow() + "', null, " +
-            observacion + ", 0, 1, null, null, null)";
+            observacion + ", 0, 0, null, null)";
 
         cmdSQL(query, res);
     },
@@ -317,10 +317,25 @@ module.exports = {
     },
     //se registrara la aprobacion y edit sera la fecha de aprovacion 
     updateRegistroHoraAprovado: (req, res) => {
+        var observacion = null;
+        if(req.body.observacionRegistroHora != null ){
+            observacion = "'" + req.body.observacionRegistroHora + "'";
+        }
+
         var query = "UPDATE RegistroHora SET " +
-            "aprovado = '" + req.body.aprovadoRegistroHora + "', " +
-            "edit = '" + dateNow() + "' " +
-            "WHERE idRegistroHora = " + req.params.id;
+        "observacion = " + observacion + ", " +
+        "aprobado = " + req.body.aprobadoRegistroHora + ", " +
+        "edit = '" + dateNow() + "' " +
+        "WHERE idRegistroHora = "+ req.params.id;
+
+        cmdSQL(query, res);
+    },
+    //se registrara la aprobacion de Finanzas para que luego no pueda cambiar de aprobacion el
+    //jefe de departamento o eliminar
+    updateRegistroHoraAprobarFinanzas: (req, res) => {
+        var query = "UPDATE RegistroHora SET " +
+        "aprobadoFinanzas = " + req.body.aprobadoFinanzas + " " +
+        "WHERE idRegistroHora = "+ req.params.id;
 
         cmdSQL(query, res);
     },
@@ -343,7 +358,13 @@ module.exports = {
     },
     deleteRegistroHora: (req, res) => {
 
+        var observacion = null;
+        if(req.body.observacionRegistroHora != null ){
+            observacion = "'" + req.body.observacionRegistroHora + "'";
+        }
+
         var query = "UPDATE RegistroHora SET " +
+                    "observacion = " + observacion + ", " +
                     "delet = '" + dateNow() + "' " +
                     "WHERE idRegistroHora = " + req.params.id;
 

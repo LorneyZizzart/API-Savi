@@ -35,42 +35,55 @@ function dateNow(){
 }
 
 module.exports = {
+    //Consulta solo de la tabla de acreedores
+    getListAcreedr: (req, res) => {
+        var query = "SELECT * FROM Acreedor WHERE delet IS NULL";
+
+        cmdSQL(query, res);
+
+    },
     //Informes aprobados en finanzas
     getAcreedor: (req, res) =>{
-        var query = "";
+        var query = "SELECT  pe.codEstudiante, pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " + 
+                    "de.idDepartamento, de.nombre as departamento, " +
+                    "be.idBeca, be.nombre as beca, " +
+                    "co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio, " +
+                    "ac.idInformeEstudiante, ac.idUsuario, ac.fechaAsignado, ac.montoBs, ac.estado " +
+                    "FROM Acreedor ac, Convenio co, Beca be, Departamento de, Persona pe " +
+                    "WHERE ac.idConvenio = co.idConvenio " +
+                    "AND co.idPersona = pe.idPersona " +
+                    "AND co.idBeca = be.idBeca " +
+                    "AND co.idDepartamento = de.idDepartamento " +
+                    "AND co.delet IS NULL " +
+                    "AND ac.delet IS NULL " +
+                    "ORDER BY ac.fechaAsignado ASC";
 
         cmdSQL(query, res);
     },
-    addInformeFinanzas: (req, res) => {
+    addAcreedor: (req, res) => {
 
         var query = "INSERT INTO Acreedor VALUES( " +
-            req.body.idInformeFinanzas + ", " +
+            req.body.idInformeEstudiante + ", " +
             req.body.idConvenio + ", " +
             req.body.idUsuario + ", '" +
             dateNow() + "', '" + 
-            req.body.montoBs + "', 1, null, null)";
+            req.body.montoBs + "', 1, null, null, null)";
 
         cmdSQL(query, res);
     },
-    updateInformeFinanzasArchivar: (req, res) => {
-        var query;
-        if(req.body.archivar == "SI"){
-            query = "UPDATE InformeFinanzas SET " +
-            "archivar = '" + dateNow() + "' " +
-            "WHERE idInformeFinanzas = " + req.params.id;
-        }else if(req.body.archivar == "NO"){
-            query = "UPDATE InformeFinanzas SET " +
-            "archivar = NULL " +
-            "WHERE idInformeFinanzas = " + req.params.id;
-        }        
+    updateAcreedorSaldo: (req, res) => {
+
+        var query = "UPDATE Acreedor SET " +
+                    "montoBs = '" + req.body.montoBs + "', " +
+                    "edit = '" + dateNow() + "' " +
+                    "WHERE idConvenio = " + req.params.id + "AND delet IS NULL"; 
 
         cmdSQL(query, res);
     },
-    deleteInformeFinanzas: (req, res) => {
-
-        var query = "UPDATE InformeFinanzas SET " +
+    deleteAcreedor: (req, res) => {
+        var query = "UPDATE Acreedor SET " +
                     "delet = '" + dateNow() + "' " +
-                    "WHERE idInformeEstudiante = " + req.params.id;
+                    "WHERE idInformeEstudiante = " + req.params.id;      
 
         cmdSQL(query, res);
     }

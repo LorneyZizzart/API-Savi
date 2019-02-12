@@ -55,14 +55,55 @@ module.exports = {
                     "WHERE pe.idPersona = us.idPersona " +
                     "AND pe.idPersona = co.idPersona " +
                     "AND co.idDepartamento = de.idDepartamento " +
-                    "AND co.idBeca = be.idBeca " + 
+                    "AND co.idBeca = be.idBeca  " +
                     "AND us.idRol = 5 " +
-                    "AND de.idDepartamento = " + req.params.idDep +
-                    " AND us.estado = 1 " +
+                    "AND de.idDepartamento = 1 " +
+                    "AND us.estado = 1 " +
                     "AND co.estado = 1 " +
                     "AND us.delet IS NULL " +
                     "AND co.delet IS NULL " +
-                    "ORDER BY pe.primerNombre ASC";
+                    "ORDER BY pe.primerApellido ASC";
+        cmdSQL(query, res);
+    },
+    //Listar los estudiantes x departamento para informacion
+    getEstudianteInfo: (req, res) => {
+        var query = "SELECT pe.idPersona, us.idUsuario, us.idRol, co.idConvenio, de.idDepartamento, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
+                    "us.estado as estadoUsuario, " +
+                    "de.idDepartamento, de.nombre as departamento, " +
+                    "ar. nombre as nombreArea, " +
+                    "be.idBeca, be.nombre as beca, " + 
+                    "co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio " +
+                    "FROM Persona pe, Usuario us, Convenio co, Departamento de, Beca be, Area ar, AsignacionArea aa " +
+                    "WHERE pe.idPersona = us.idPersona " +
+                    "AND pe.idPersona = co.idPersona " +
+                    "AND co.idDepartamento = de.idDepartamento " +
+                    "AND co.idBeca = be.idBeca " +
+                    "AND de.idDepartamento = ar.idDepartamento " +
+                    "AND ar.idArea = aa.idArea " +
+                    "AND aa.idConvenio = co.idConvenio " +
+                    "AND us.idRol = 5 " +
+                    "AND de.idDepartamento = " + req.params.idDep + " " +
+                    "ORDER BY pe.primerApellido ASC";
+        cmdSQL(query, res);
+    },
+    //Listar los estudiantes para finanzas para la informacion de los estudiantes
+    getEstudianteInfoFinanzas: (req, res) => {
+        var query = "SELECT pe.idPersona, pe.codEstudiante, us.idUsuario, us.idRol, co.idConvenio, de.idDepartamento, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
+                    "us.estado as estadoUsuario, " +
+                    "de.idDepartamento, de.nombre as departamento, " +
+                    "ar. nombre as nombreArea, " +
+                    "be.idBeca, be.nombre as beca, " + 
+                    "co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio " +
+                    "FROM Persona pe, Usuario us, Convenio co, Departamento de, Beca be, Area ar, AsignacionArea aa " +
+                    "WHERE pe.idPersona = us.idPersona " +
+                    "AND pe.idPersona = co.idPersona " +
+                    "AND co.idDepartamento = de.idDepartamento " +
+                    "AND co.idBeca = be.idBeca " +
+                    "AND de.idDepartamento = ar.idDepartamento " +
+                    "AND ar.idArea = aa.idArea " +
+                    "AND aa.idConvenio = co.idConvenio " +
+                    "AND us.idRol = 5 " +
+                    "ORDER BY pe.primerApellido ASC";
         cmdSQL(query, res);
     },
     getMaxIdPersona: (req, res) => {

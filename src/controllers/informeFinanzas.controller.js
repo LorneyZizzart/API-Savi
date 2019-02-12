@@ -38,6 +38,7 @@ module.exports = {
     //Informes aprobados en finanzas
     getInformeFinanzas: (req, res) =>{
         var query = "SELECT fi.idInformeFinanzas, fi.fechaAprobada, fi.idUsuario, " +
+                    "rh.idRegistroHora, rh.Observacion as observacionRegistroHora, " +  
                     "ie.idInformeEstudiante, ie.fecha, ie.totalHoras, ie.totalSaldo, ie.aprobadoJefeDep, ie.aprobadoFinanzas, " +
                     "co.idConvenio, co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio, " +
                     "be.idBeca, be.nombre as beca, " +
@@ -60,6 +61,7 @@ module.exports = {
     },
     getInformeFinanzasArchivadas: (req, res) =>{
         var query = "SELECT fi.idInformeFinanzas, fi.fechaAprobada, fi.idUsuario, " +
+                    "rh.idRegistroHora, rh.Observacion as observacionRegistroHora, " +  
                     "ie.idInformeEstudiante, ie.fecha, ie.totalHoras, ie.totalSaldo, ie.aprobadoJefeDep, ie.aprobadoFinanzas, " +
                     "co.idConvenio, co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio, " +
                     "be.idBeca, be.nombre as beca, " +
@@ -85,6 +87,9 @@ module.exports = {
         var query = "INSERT INTO InformeFinanzas VALUES( " +
             req.body.idUsuario + ", " +
             req.body.idInformeEstudiante + ", '" +
+            req.body.totalHorasF + "', '" +
+            req.body.totalSaldoF + "', '" +
+            req.body.obsrevacionFinanzas + "', '" +
             dateNow() + "', null, null)";
 
         cmdSQL(query, res);

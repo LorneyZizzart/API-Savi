@@ -35,62 +35,79 @@ function dateNow(){
 }
 
 module.exports = {
-    //Informes aprobados en finanzas
+    //Informes revisados en finanzas
     getInformeFinanzas: (req, res) =>{
-        var query = "SELECT fi.idInformeFinanzas, fi.fechaAprobada, fi.idUsuario, " +
-                    "rh.idRegistroHora, rh.Observacion as observacionRegistroHora, " +  
-                    "ie.idInformeEstudiante, ie.fecha, ie.totalHoras, ie.totalSaldo, ie.aprobadoJefeDep, ie.aprobadoFinanzas, " +
-                    "co.idConvenio, co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio, " +
-                    "be.idBeca, be.nombre as beca, " +
+        var query = "SELECT pe.idPersona, pe.codEstudiante, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, " +
                     "de.idDepartamento, de.nombre as departamento, " +
-                    "pe.idPersona, pe.codEstudiante, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona " +
-                    "FROM InformeFinanzas fi, InformeEstudiante ie, RegistroHora rh, Convenio co, Persona pe, Beca be, Departamento de, Usuario us " +
-                    "WHERE fi.idInformeEstudiante = ie.idInformeEstudiante " +
-                    "AND ie.idRegistroHora = rh.idRegistroHora " +
-                    "AND rh.idConvenio = co.idConvenio " +
-                    "AND co.idPersona =pe.idPersona " +
-                    "AND co.idBeca = be.idBeca " +
+                    "co.idConvenio, " +
+                    "rh.idRegistroHora, " +
+                    "ie.idInformeEstudiante, ie.fecha, ie.totalHoras, ie.totalSaldo, ie.aprobadoJefeDep, ie.aprobadoFinanzas, " +
+                    "fi.idInformeFinanzas, fi.fechaAprobada, fi.idUsuario, fi.totalHoras as totalHorasF, fi.totalSaldo as totalSaldoF, fi.observacion as obsrevacionFinanzas " +
+                    "FROM Persona pe, Departamento de, Convenio co, RegistroHora rh, InformeEstudiante ie, InformeFinanzas fi " +
+                    "WHERE pe.idPersona = co.idPersona " +
                     "AND co.idDepartamento = de.idDepartamento " +
-                    "AND us.idPersona = pe.idPersona " +
+                    "AND co.idConvenio = rh.idConvenio " +
+                    "AND rh.idRegistroHora = ie.idRegistroHora " +
+                    "AND ie.idInformeEstudiante = fi.idInformeEstudiante " +
                     "AND fi.delet IS NULL " +
-                    "AND fi.fechaAprobada IS NOT NULL " +
+                    "AND ie.delet IS NULL " +
                     "AND fi.archivar IS NULL " +
                     "ORDER BY ie.fecha ASC";
 
         cmdSQL(query, res);
     },
     getInformeFinanzasArchivadas: (req, res) =>{
-        var query = "SELECT fi.idInformeFinanzas, fi.fechaAprobada, fi.idUsuario, " +
-                    "rh.idRegistroHora, rh.Observacion as observacionRegistroHora, " +  
-                    "ie.idInformeEstudiante, ie.fecha, ie.totalHoras, ie.totalSaldo, ie.aprobadoJefeDep, ie.aprobadoFinanzas, " +
-                    "co.idConvenio, co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio, " +
-                    "be.idBeca, be.nombre as beca, " +
+        var query = "SELECT pe.idPersona, pe.codEstudiante, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, " +
                     "de.idDepartamento, de.nombre as departamento, " +
-                    "pe.idPersona, pe.codEstudiante, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona " +
-                    "FROM InformeFinanzas fi, InformeEstudiante ie, RegistroHora rh, Convenio co, Persona pe, Beca be, Departamento de, Usuario us " +
-                    "WHERE fi.idInformeEstudiante = ie.idInformeEstudiante " +
-                    "AND ie.idRegistroHora = rh.idRegistroHora " +
-                    "AND rh.idConvenio = co.idConvenio " +
-                    "AND co.idPersona =pe.idPersona " +
-                    "AND co.idBeca = be.idBeca " +
+                    "ie.idInformeEstudiante, ie.fecha, ie.totalHoras, ie.totalSaldo, ie.aprobadoJefeDep, ie.aprobadoFinanzas, " +
+                    "fi.idInformeFinanzas, fi.fechaAprobada, fi.idUsuario, fi.totalHoras as totalHorasF, fi.totalSaldo as totalSaldoF, fi.observacion as obsrevacionFinanzas " +
+                    "FROM Persona pe, Departamento de, Convenio co, RegistroHora rh, InformeEstudiante ie, InformeFinanzas fi " +
+                    "WHERE pe.idPersona = co.idPersona " +
                     "AND co.idDepartamento = de.idDepartamento " +
-                    "AND us.idPersona = pe.idPersona " +
+                    "AND co.idConvenio = rh.idConvenio " +
+                    "AND rh.idRegistroHora = ie.idRegistroHora " +
+                    "AND ie.idInformeEstudiante = fi.idInformeEstudiante " +
                     "AND fi.delet IS NULL " +
-                    "AND fi.fechaAprobada IS NOT NULL " +
+                    "AND ie.delet IS NULL " +
                     "AND fi.archivar IS NOT NULL " +
                     "ORDER BY ie.fecha ASC";
 
         cmdSQL(query, res);
     },
     addInformeFinanzas: (req, res) => {
-
+        var observacion = null;
+        if(req.body.obsrevacionFinanzas != undefined){
+            observacion = req.body.obsrevacionFinanzas;
+        }
         var query = "INSERT INTO InformeFinanzas VALUES( " +
             req.body.idUsuario + ", " +
             req.body.idInformeEstudiante + ", '" +
             req.body.totalHorasF + "', '" +
             req.body.totalSaldoF + "', '" +
-            req.body.obsrevacionFinanzas + "', '" +
+            observacion + "', '" +
             dateNow() + "', null, null)";
+
+        cmdSQL(query, res);
+    },
+    updateInformeFinanzas: (req, res) => {
+        console.log("infor:",req.body.idUsuario);
+        console.log("infor:",req.body.totalHorasF);
+        console.log("infor:",req.body.totalSaldoF);
+        console.log("infor:",req.body.obsrevacionFinanzas);
+        var observacion = null;
+        if(req.body.obsrevacionFinanzas != undefined){
+            observacion = "observacion = '" + req.body.obsrevacionFinanzas + "'";
+        }if(req.body.obsrevacionFinanzas == null || req.body.obsrevacionFinanzas == undefined){
+            observacion = "observacion = NULL";
+        }
+
+        var query = "UPDATE InformeFinanzas SET " +
+            "idUsuario = " + req.body.idUsuario + ", " +
+            "totalHoras = '" + req.body.totalHorasF + "', " +
+            "totalSaldo = '" + req.body.totalSaldoF + "', " +
+            observacion + ", " +
+            "fechaAprobada = '" + dateNow() + "' " +
+            "WHERE idInformeFinanzas = " + req.params.id;               
 
         cmdSQL(query, res);
     },

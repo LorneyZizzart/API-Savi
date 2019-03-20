@@ -209,7 +209,7 @@ module.exports = {
                     "AND co.idDepartamento = de.idDepartamento " +
                     "AND rh.delet IS NULL " +
                     "AND co.delet IS NULL " +
-                    "AND de.idDepartamento = " + req.params.idDepto + "ORDER BY pe.primerApellido ASC";
+                    "AND de.idDepartamento = " + req.params.idDepto;
         cmdSQL(query, res);
     },
     getRegistroHorasYesterday: (req, res) =>{
@@ -237,7 +237,7 @@ module.exports = {
                     "AND co.idDepartamento = de.idDepartamento " +
                     "AND rh.delet IS NULL " +
                     "AND co.delet IS NULL " +
-                    "AND de.idDepartamento = " + req.params.idDepto + " ORDER BY pe.primerApellido ASC";
+                    "AND de.idDepartamento = " + req.params.idDepto;
         cmdSQL(query, res);
     },
     getRegistroHorasWeek: (req, res) => {
@@ -264,7 +264,7 @@ module.exports = {
                     "AND co.idDepartamento = de.idDepartamento " +
                     "AND rh.delet IS NULL " +
                     "AND co.delet IS NULL " +
-                    "AND de.idDepartamento = " + req.params.idDepto + "ORDER BY pe.primerApellido ASC";
+                    "AND de.idDepartamento = " + req.params.idDepto;
         cmdSQL(query, res);
     },
     getRegistroHorasMonth: (req, res) => {
@@ -291,7 +291,7 @@ module.exports = {
                     "AND co.idDepartamento = de.idDepartamento " +
                     "AND rh.delet IS NULL " +
                     "AND co.delet IS NULL " +
-                    "AND de.idDepartamento = " + req.params.idDepto + "ORDER BY pe.primerApellido ASC";
+                    "AND de.idDepartamento = " + req.params.idDepto;
         cmdSQL(query, res);
     },
     //para marcar hora de entrada
@@ -310,6 +310,7 @@ module.exports = {
     //para marcar hora de salida
     updateRegistroHoraSalida: (req, res) => {
         var query = "UPDATE RegistroHora SET " +
+            "aprobado = '0', " +
             "fechaHoraSalida = '" + dateNow() + "' " +
             "WHERE idRegistroHora = " + req.params.id;
 

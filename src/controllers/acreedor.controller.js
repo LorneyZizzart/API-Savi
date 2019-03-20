@@ -48,7 +48,7 @@ module.exports = {
                     "de.idDepartamento, de.nombre as departamento, " +
                     "be.idBeca, be.nombre as beca, " +
                     "co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio, " +
-                    "ac.idInformeEstudiante, ac.idUsuario, ac.fechaAsignado, ac.montoBs, ac.estado " +
+                    "ac.idAcreedor, ac.idConvenio, ac.idInformeEstudiante, ac.idUsuario, ac.fechaAsignado, ac.montoBs, ac.estado " +
                     "FROM Acreedor ac, Convenio co, Beca be, Departamento de, Persona pe " +
                     "WHERE ac.idConvenio = co.idConvenio " +
                     "AND co.idPersona = pe.idPersona " +
@@ -72,6 +72,16 @@ module.exports = {
         cmdSQL(query, res);
     },
     updateAcreedorSaldo: (req, res) => {
+
+        var query = "UPDATE Acreedor SET " +
+                    "idInformeEstudiante = " + req.body.idInformeEstudiante + ", " +
+                    "montoBs = '" + req.body.montoBs + "', " +
+                    "edit = '" + dateNow() + "' " +
+                    "WHERE idConvenio = " + req.params.id + "AND delet IS NULL"; 
+
+        cmdSQL(query, res);
+    },
+    updateDevolverSaldo: (req, res) => {
 
         var query = "UPDATE Acreedor SET " +
                     "montoBs = '" + req.body.montoBs + "', " +

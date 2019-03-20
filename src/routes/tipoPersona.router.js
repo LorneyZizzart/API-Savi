@@ -1,6 +1,7 @@
 const tipoPersonaRouter = require('express').Router();
 
-const { getTipoPersona, getEstudianteDepartamento, getEstudianteInfo, getEstudianteInfoFinanzas,
+const { getTipoPersona, getEstudianteDepartamento, getEstudianteInfo, 
+        getEstudianteInfoFinanzas, getEstudianteInfoF,
         getMaxIdPersona, addTipoPersona 
         } = require('../controllers/tipoPersona.controller');
 
@@ -20,5 +21,7 @@ tipoPersonaRouter.route('/infoEstudiante/:idDep')
 tipoPersonaRouter.route('/finanzas/infoEstudiante/')
     .get(getEstudianteInfoFinanzas);
 
+tipoPersonaRouter.route('/finanzas/infoEstudiante/:id')
+    .get(getEstudianteInfoF);
 
 module.exports = tipoPersonaRouter;

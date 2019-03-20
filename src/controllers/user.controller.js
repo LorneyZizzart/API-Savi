@@ -42,9 +42,19 @@ module.exports = {
         "FROM Persona pe, Usuario us " +
         "WHERE pe.idPersona = us.idPersona AND us.delet IS NULL ORDER BY pe.primerNombre ASC"
         cmdSQL(query, res);
-    },
+    },//obtener datos del usuario para el navbar
     getUser: (req, res) => {
-        var query = 'SELECT * FROM Usuario WHERE idUsuario = ' + req.params.id;
+        var query = "SELECT pe.idPersona, us.idUsuario, us.idRol, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, " +
+                    "rl.nombre as rol, us.estado as estadoUsuario " +
+                    "FROM Usuario us, Rol rl, Persona pe " +
+                    "WHERE pe.idPersona = us.idPersona " +
+                    "AND us.idRol = rl.idRol " +
+                    "AND idUsuario = " + req.params.id;
+        cmdSQL(query, res);
+    },//para el login
+    getVerificarUser: (req, res) => {
+        var query = "SELECT * FROM Usuario WHERE usuario = '" + req.params.user + "' "
+                    "AND password = '" + req.params.password + "'";
         cmdSQL(query, res);
     },
     addUser: (req, res) => {

@@ -43,30 +43,29 @@ module.exports = {
     },
     getDepartamentos: (req, res) => {
         //Departamentos con Jefe dep, y con su historial
-        var query = "SELECT Distinct de.idDepartamento, " +
+        var query = "SELECT de.idDepartamento, de.nombre as nombreDepartamento, de.fechaRegistro as fechaRegistroDepartamento, de.estado as estadoDepartamento, " +
                     "pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
-                    "org.idOrganizacion, org.fechaRegistro as fechaRegistroOrganizacion, org.estado as estadoOrganizacion, " +
-                    "de.nombre as nombreDepartamento, de.fechaRegistro as fechaRegistroDepartamento, de.estado as estadoDepartamento, " +
-                    "hd.costoHora, hd.limiteEstudiante, hd.fechaRegistro as fechaRegistroHistorialDep, hd.estado as estadoHistorialDepartamento " +
-                    "FROM Persona pe, Organizacion org, Departamento de, HistorialDepartamento hd " +
-                    "WHERE pe.idPersona = org.idPersona " +
-                    "AND org.idDepartamento = de.idDepartamento " +
-                    "AND de.idDepartamento = hd.idDepartamento " +
-                    "AND de.delet IS NULL " +
+                    "hd.limiteEstudiante, hd.costoHora, hd.fechaRegistro as fechaRegistroHistorialDep, " +
+                    "org.idOrganizacion, org.fechaRegistro as fechaRegistroOrganizacion, org.estado as estadoOrganizacion " +
+                    "FROM Departamento de, Persona pe, Organizacion org, HistorialDepartamento hd " +
+                    "WHERE hd.idDepartamento = de.idDepartamento " +
+                    "AND de.idDepartamento = org.idDepartamento " +
+                    "AND org.idPersona = pe.idPersona " +
+                    "AND hd.estado = 1 " +
                     "ORDER BY de.nombre ASC";
         cmdSQL(query, res);
     },
     //Obtener todos los datos de un departamento -> se lo utiliza en informe de hoy
     getDepartamento: (req, res) => {
-        var query = "SELECT Distinct de.idDepartamento, " +
+        var query = "SELECT de.idDepartamento, de.nombre as nombreDepartamento, de.fechaRegistro as fechaRegistroDepartamento, de.estado as estadoDepartamento, " +
                     "pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
-                    "org.idOrganizacion, org.fechaRegistro as fechaRegistroOrganizacion, org.estado as estadoOrganizacion, " +
-                    "de.nombre as nombreDepartamento, de.fechaRegistro as fechaRegistroDepartamento, de.estado as estadoDepartamento, " +
-                    "hd.costoHora, hd.limiteEstudiante, hd.fechaRegistro as fechaRegistroHistorialDep, hd.estado as estadoHistorialDepartamento " +
-                    "FROM Persona pe, Organizacion org, Departamento de, HistorialDepartamento hd " +
-                    "WHERE pe.idPersona = org.idPersona " +
-                    "AND org.idDepartamento = de.idDepartamento " +
-                    "AND de.idDepartamento = hd.idDepartamento " +
+                    "hd.limiteEstudiante, hd.costoHora, hd.fechaRegistro as fechaRegistroHistorialDep, " +
+                    "org.idOrganizacion, org.fechaRegistro as fechaRegistroOrganizacion, org.estado as estadoOrganizacion " +
+                    "FROM Departamento de, Persona pe, Organizacion org, HistorialDepartamento hd " +
+                    "WHERE hd.idDepartamento = de.idDepartamento " +
+                    "AND de.idDepartamento = org.idDepartamento " +
+                    "AND org.idPersona = pe.idPersona " +
+                    "AND hd.estado = 1 " +
                     'AND de.idDepartamento = ' + req.params.id;
 
         cmdSQL(query, res);

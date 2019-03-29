@@ -19,6 +19,7 @@ const informeEstudiante = require('./routes/informeEstudiante.router');
 const informeFinanzas = require('./routes/informeFinanzas.router');
 const acreedorRouter = require('./routes/acreedor.router');
 const acreedorDescuento = require('./routes/descuento.router');
+const carrera = require('./routes/carrera.router');
 
 //setting
 //app.set('views', path.join(__dirname, 'views'));
@@ -55,6 +56,7 @@ app.use('/informeEstudiante', informeEstudiante)
 app.use('/informeFinanzas', informeFinanzas)
 app.use('/acreedor', acreedorRouter)
 app.use('/descuento', acreedorDescuento)
+app.use('/carrera', carrera)
 
 //static files
 //start server

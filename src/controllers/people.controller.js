@@ -36,7 +36,7 @@ function dateNow(){
 
 module.exports = {
     getPeoples: (req, res) => {
-        var query = "SELECT * FROM Persona ORDER BY primerNombre ASC";
+        var query = "SELECT * FROM Persona WHERE delet IS NULL ORDER BY primerApellido ASC";
         cmdSQL(query, res);
     },
     getPeople: (req, res) => {
@@ -44,7 +44,7 @@ module.exports = {
         cmdSQL(query, res);
     },
     addPeople: (req, res) => {
-        var codEstudiante, segundoNombre, segundoApellido, carrera, semestre;
+        var codEstudiante, segundoNombre, segundoApellido, semestre, fechaNac;
 
         if(req.body.codEstudiante == null){codEstudiante = null;}
         else{ codEstudiante = "'" + req.body.codEstudiante + "'";}
@@ -55,24 +55,22 @@ module.exports = {
         if(req.body.segundoApellido == null){segundoApellido = null;}
         else{ segundoApellido = "'" + req.body.segundoApellido + "'";}
 
-        if(req.body.carrera == null){carrera = null;}
-        else{ carrera = "'" + req.body.carrera + "'";}
-
         if(req.body.semestre == null){semestre = null;}
         else{ semestre = "'" + req.body.semestre + "'";}
 
         var query = "INSERT INTO Persona VALUES(" +
+            parseInt(req.body.idCarrera) + ", " +
             codEstudiante + ", '" +
             req.body.primerNombre + "', " +
             segundoNombre + ", '" +
             req.body.primerApellido + "', " +
             segundoApellido + ", '" +
             req.body.ci + "', " +
-            carrera + ", " +
             semestre + ", '" +
             req.body.nacionalidad + "', '" +
             req.body.direccion + "', " +
-            req.body.celular + ", '1995/06/15', 1, '" + 
+            req.body.celular + ", '" + 
+            req.body.fechaNacimiento + "', 1, '" + 
             dateNow() + "', null, null)";
 
         cmdSQL(query, res);
@@ -96,6 +94,8 @@ module.exports = {
         if(req.body.semestre == null){semestre = null;}
         else{ semestre = "'" + req.body.semestre + "'";}
 
+        console.log(req.body);
+
         var query = "UPDATE Persona SET " +
                     "codEstudiante = " + codEstudiante + ", " +
                     "primerNombre = '" + req.body.primerNombre + "', " +
@@ -106,10 +106,8 @@ module.exports = {
                     "nacionalidad = '" + req.body.nacionalidad + "', " +
                     "fechaNacimiento = '" + req.body.fechaNacimiento + "', " +
                     "ci = '" + req.body.ci + "', " +
-                    "carrera = " + carrera + ", " +
                     "semestre = " + semestre + ", " +
                     "celular = " + req.body.celular + ", " +
-                    "estado = " + req.body.estado + ", " +
                     "edit = '" + dateNow() + "' " +
                     "WHERE idPersona = " + req.params.id;
 

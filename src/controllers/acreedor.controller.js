@@ -44,13 +44,14 @@ module.exports = {
     },
     //Informes aprobados en finanzas
     getAcreedor: (req, res) =>{
-        var query = "SELECT  pe.codEstudiante, pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " + 
+        var query = "SELECT pe.codEstudiante, pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, ca.idCarrera, ca.nombre as carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " + 
                     "de.idDepartamento, de.nombre as departamento, " +
                     "be.idBeca, be.nombre as beca, " +
                     "co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio, " +
                     "ac.idAcreedor, ac.idConvenio, ac.idInformeEstudiante, ac.idUsuario, ac.fechaAsignado, ac.montoBs, ac.estado " +
-                    "FROM Acreedor ac, Convenio co, Beca be, Departamento de, Persona pe " +
+                    "FROM Acreedor ac, Convenio co, Beca be, Departamento de, Persona pe, Carrera ca " +
                     "WHERE ac.idConvenio = co.idConvenio " +
+                    "AND pe.idCarrera = ca.idCarrera " +
                     "AND co.idPersona = pe.idPersona " +
                     "AND co.idBeca = be.idBeca " +
                     "AND co.idDepartamento = de.idDepartamento " +

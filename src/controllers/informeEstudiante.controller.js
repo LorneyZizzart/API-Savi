@@ -37,16 +37,17 @@ function dateNow(){
 module.exports = {
     //Generar informe x departamento
     getInformeEstudiante: (req, res) =>{
-        var query = "SELECT ie.idInformeEstudiante, ie.idRegistroHora, co.idConvenio, pe.codEstudiante, pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
+        var query = "SELECT ie.idInformeEstudiante, ie.idRegistroHora, co.idConvenio, pe.codEstudiante, pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, ca.idCarrera, ca.nombre as carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
                     "rh.idRegistroHora, rh.Observacion as observacionRegistroHora, " +
                     "de.idDepartamento, de.nombre as departamento, " +
                     "be.idBeca, be.nombre as beca, " +
                     "co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio, " +
                     "ie.fecha, ie.totalHoras, ie.totalSaldo, ie.aprobadoJefeDep, ie.aprobadoFinanzas " +
-                    "FROM Persona pe, Convenio co, Departamento de, Beca be, InformeEstudiante ie, RegistroHora rh " +
+                    "FROM Persona pe, Convenio co, Departamento de, Beca be, InformeEstudiante ie, RegistroHora rh, Carrera ca " +
                     "WHERE ie.idRegistroHora = rh.idRegistroHora " +
                     "AND rh.idConvenio = co.idConvenio " +
                     "AND co.idPersona = pe.idPersona " +
+                    "AND pe.idCarrera = ca.idCarrera " +
                     "AND co.idDepartamento = de.idDepartamento " +
                     "AND co.idBeca = be.idBeca " +
                     "AND ie.delet IS NULL " +
@@ -57,16 +58,17 @@ module.exports = {
         cmdSQL(query, res);
     },
     getInformeEstudianteArchivados: (req, res) =>{
-        var query = "SELECT ie.idInformeEstudiante, co.idConvenio, pe.codEstudiante, pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
+        var query = "SELECT ie.idInformeEstudiante, co.idConvenio, pe.codEstudiante, pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, ca.idCarrera, ca.nombre as carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
                     "rh.idRegistroHora, rh.Observacion as observacionRegistroHora, " +
                     "de.idDepartamento, de.nombre as departamento, " +
                     "be.idBeca, be.nombre as beca, " +
                     "co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio, " +
                     "ie.fecha, ie.totalHoras, ie.totalSaldo, ie.aprobadoJefeDep, ie.aprobadoFinanzas " +
-                    "FROM Persona pe, Convenio co, Departamento de, Beca be, InformeEstudiante ie, RegistroHora rh " +
+                    "FROM Persona pe, Convenio co, Departamento de, Beca be, InformeEstudiante ie, RegistroHora rh, Carrera ca " +
                     "WHERE ie.idRegistroHora = rh.idRegistroHora " +
                     "AND rh.idConvenio = co.idConvenio " +
                     "AND co.idPersona = pe.idPersona " +
+                    "AND pe.idCarrera = ca.idCarrera " +
                     "AND co.idDepartamento = de.idDepartamento " +
                     "AND co.idBeca = be.idBeca " +
                     "AND ie.delet IS NULL " +

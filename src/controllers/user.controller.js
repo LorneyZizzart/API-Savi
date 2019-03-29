@@ -36,11 +36,12 @@ function dateNow(){
 
 
 module.exports = {
+    //VER LOS USUARIOS PARA FINANZAS
     getUsers: (req, res) => {
-        var query = "SELECT pe.idPersona, us.idUsuario, us.idRol, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, " +
+        var query = "SELECT pe.idPersona, us.idUsuario, us.idRol, pe.codEstudiante, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, ca.idCarrera, ca.nombre as carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, " +
         "pe.estado as estadoPersona, us.estado as estadoUsuario, us.usuario, us.password " +
-        "FROM Persona pe, Usuario us " +
-        "WHERE pe.idPersona = us.idPersona AND us.delet IS NULL ORDER BY pe.primerNombre ASC"
+        "FROM Persona pe, Usuario us, Carrera ca " +
+        "WHERE pe.idPersona = us.idPersona AND pe.idCarrera = ca.idCarrera AND us.idRol = 5 AND us.delet IS NULL ORDER BY pe.primerApellido ASC"
         cmdSQL(query, res);
     },//obtener datos del usuario para el navbar
     getUser: (req, res) => {
@@ -53,8 +54,7 @@ module.exports = {
         cmdSQL(query, res);
     },//para el login
     getVerificarUser: (req, res) => {
-        var query = "SELECT * FROM Usuario WHERE usuario = '" + req.params.user + "' "
-                    "AND password = '" + req.params.password + "'";
+        var query = "SELECT * FROM Usuario WHERE usuario = '" + req.body.usuario + "' AND password = '" + req.body.password + "' AND delet IS NULL";
         cmdSQL(query, res);
     },
     addUser: (req, res) => {
@@ -69,14 +69,14 @@ module.exports = {
         cmdSQL(query, res);
     },
     updateUser: (req, res) => {
-
+        console.log(req.body);     
         var query = "UPDATE Usuario SET " +
-            "idRol =" + req.body.idRol + ", " +
+            "idRol = " + req.body.idRol + ", " +
             "usuario = '" + req.body.usuario + "', " +
             "password = '" + req.body.password + "', " +
             "estado = " + req.body.estado + ", " +
             "edit = '" + dateNow() + "' "+
-            "WHERE idUsuario = " + req.params.id;
+            "WHERE idUsuario = " + req.params.id + "AND idPersona = " + req.params.idPersona;
 
         cmdSQL(query, res);
     },

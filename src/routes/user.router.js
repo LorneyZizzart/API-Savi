@@ -13,7 +13,11 @@ userRouter.route('/:id')
     .put(updateUser)
     .delete(deleteUser);
 
-userRouter.route('/:user/:password')
-    .get(getVerificarUser);
+userRouter.route('/:id/:idPersona')
+    .put(updateUser)
+
+
+userRouter.route('/verificarUser/')
+    .post(getVerificarUser);
 
 module.exports = userRouter;

@@ -36,15 +36,16 @@ function dateNow(){
 
 module.exports = {
     getConvenios: (req, res) => {
-        var query = "SELECT co.idConvenio, pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
+        var query = "SELECT co.idConvenio, pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, ca.idCarrera, ca.nombre as carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
                     "de.idDepartamento, de.nombre as departamento, " +
                     "be.idBeca, be.nombre as beca, " +
                     "co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio " +
-                    "FROM Convenio co, Persona pe, Departamento de, Beca be " +
+                    "FROM Convenio co, Persona pe, Departamento de, Beca be, Carrera ca " +
                     "WHERE co.idPersona = pe.idPersona " +
+                    "AND pe.idCarrera = ca.idCarrera " +
                     "AND co.idDepartamento = de.idDepartamento " +
                     "AND co.idBeca = be.idBeca " + 
-                    "AND co.delet IS NULL ORDER BY pe.primerNombre ASC";
+                    "AND co.delet IS NULL ORDER BY pe.primerApellido ASC";
         cmdSQL(query, res);
     },
     getConvenio: (req, res) => {

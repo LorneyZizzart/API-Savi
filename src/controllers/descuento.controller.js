@@ -36,15 +36,16 @@ function dateNow(){
 
 module.exports = {
     getDescuentos: (req, res) => {
-        var query = "SELECT  pe.codEstudiante, pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
+        var query = "SELECT  pe.codEstudiante, pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, ca.idCarrera, ca.nombre as carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
                     "de.idDepartamento, de.nombre as departamento, " +
                     "be.idBeca, be.nombre as beca, " +
                     "co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio, " +
                     "descu.idDescuento, descu.idAcreedor, co.idConvenio, descu.idUsuario, descu.fechaDescuento, descu.montoBs as montoDescuento, descu.observacion " +
-                    "FROM Descuento descu, Convenio co, Beca be, Departamento de, Persona pe, Acreedor ac " +
+                    "FROM Descuento descu, Convenio co, Beca be, Departamento de, Persona pe, Acreedor ac, Carrera ca " +
                     "WHERE descu.idAcreedor = ac.idAcreedor " +
                     "AND ac.idConvenio = co.idConvenio " +
                     "AND co.idPersona = pe.idPersona " +
+                    "AND pe.idCarrera = ca.idCarrera " +
                     "AND co.idBeca = be.idBeca " +
                     "AND co.idDepartamento = de.idDepartamento " +
                     "AND ac.delet IS NULL " +

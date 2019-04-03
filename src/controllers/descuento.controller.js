@@ -54,7 +54,6 @@ module.exports = {
         cmdSQL(query, res);
     },
     addDescuento: (req, res) => {
-
         var query = "INSERT INTO Descuento VALUES( " +
             req.body.idAcreedor + ", " +
             req.body.idUsuario + ", '" +

@@ -16,6 +16,13 @@ async function cmdSQL(query, res) {
     })
 }
 
+async function requestSQL(query){
+    sql.connect(config).then(() => {
+        return sql.query(query)
+    }).then(result => {
+    })
+}
+
 function dateNow(){
     var fechaRegistro = new Date();
         var dd = fechaRegistro.getDate();
@@ -34,15 +41,32 @@ function dateNow(){
         return fechaRegistro = yyyy+'/'+mm+'/'+dd+' '+hh+':'+min+':'+ss+'.000';
 }
 
+function descuentoCreditos(req, res){
+    var queryState = "UPDATE Acreedor SET " +
+                "estado = " + req.body.estadoAcreedor + ", " +
+                "edit = '" + dateNow() + "' " +
+                "WHERE idAcreedor = " + req.body.idAcreedor;
+
+    requestSQL(queryState);
+
+    var query = "INSERT INTO Acreedor VALUES( " +
+                req.body.idInformeEstudiante + ", " +
+                req.body.idConvenio + ", " +
+                req.body.idUsuario + ", '" +
+                dateNow() + "', '" + 
+                req.body.montoBs + "', 1, null, null, null)";
+    cmdSQL(query, res);
+}
+
 module.exports = {
     //Consulta solo de la tabla de acreedores
-    getListAcreedr: (req, res) => {
+    getListAcreedor: (req, res) => {
         var query = "SELECT * FROM Acreedor WHERE delet IS NULL";
 
         cmdSQL(query, res);
 
     },
-    //Informes aprobados en finanzas
+    //Informes aprobados en finanzas [posibles errores probar]
     getAcreedor: (req, res) =>{
         var query = "SELECT pe.codEstudiante, pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, ca.idCarrera, ca.nombre as carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " + 
                     "de.idDepartamento, de.nombre as departamento, " +
@@ -57,7 +81,27 @@ module.exports = {
                     "AND co.idDepartamento = de.idDepartamento " +
                     "AND co.delet IS NULL " +
                     "AND ac.delet IS NULL " +
+                    "AND ac.estado = 1 " +
                     "ORDER BY ac.fechaAsignado ASC";
+
+        cmdSQL(query, res);
+    },
+    //URI DE CONSUMO PARA EL SISTEMA FINANCIERO
+    getAcreedorForCod: (req, res) =>{
+        var query = "SELECT pe.codEstudiante, pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, ca.idCarrera, ca.nombre as carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " + 
+                    "de.idDepartamento, de.nombre as departamento, " +
+                    "be.idBeca, be.nombre as beca, " +
+                    "co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio, " +
+                    "ac.idAcreedor, ac.idConvenio, ac.idInformeEstudiante, ac.idUsuario, ac.fechaAsignado, ac.montoBs, ac.estado " +
+                    "FROM Acreedor ac, Convenio co, Beca be, Departamento de, Persona pe, Carrera ca " +
+                    "WHERE ac.idConvenio = co.idConvenio " +
+                    "AND pe.idCarrera = ca.idCarrera " +
+                    "AND co.idPersona = pe.idPersona " +
+                    "AND co.idBeca = be.idBeca " +
+                    "AND co.idDepartamento = de.idDepartamento " +
+                    "AND co.delet IS NULL " +
+                    "AND ac.delet IS NULL " +
+                    "AND pe.codEstudiante = " + req.params.codEstudiante;
 
         cmdSQL(query, res);
     },
@@ -71,7 +115,11 @@ module.exports = {
             req.body.montoBs + "', 1, null, null, null)";
 
         cmdSQL(query, res);
+    }, //Para cuando se le haga un descuento para pagar sus estudios
+    updateAcreedor: (req, res) => {
+        descuentoCreditos(req, res)        
     },
+    //ya no lo vamos a utilizar esperar para eliminar
     updateAcreedorSaldo: (req, res) => {
 
         var query = "UPDATE Acreedor SET " +

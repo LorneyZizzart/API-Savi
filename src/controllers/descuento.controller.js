@@ -40,7 +40,7 @@ module.exports = {
                     "de.idDepartamento, de.nombre as departamento, " +
                     "be.idBeca, be.nombre as beca, " +
                     "co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio, " +
-                    "descu.idDescuento, descu.idAcreedor, co.idConvenio, descu.idUsuario, descu.fechaDescuento, descu.montoBs as montoDescuento, descu.observacion " +
+                    "descu.idDescuento, descu.idAcreedor, co.idConvenio, descu.idUsuario, descu.fechaDescuento, descu.saldoInicial as saldoInicial, descu.montoBs as montoDescuento, descu.observacion " +
                     "FROM Descuento descu, Convenio co, Beca be, Departamento de, Persona pe, Acreedor ac, Carrera ca " +
                     "WHERE descu.idAcreedor = ac.idAcreedor " +
                     "AND ac.idConvenio = co.idConvenio " +
@@ -58,6 +58,7 @@ module.exports = {
             req.body.idAcreedor + ", " +
             req.body.idUsuario + ", '" +
             dateNow() + "', '" +
+            req.body.saldoInicial + "', '" +
             req.body.montoDescuento + "', '" +
             req.body.observacion + "', null, null)";
 

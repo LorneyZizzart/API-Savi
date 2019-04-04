@@ -2,7 +2,7 @@ const tipoPersonaRouter = require('express').Router();
 
 const { getTipoPersona, getEstudianteDepartamento, getEstudianteInfo, 
         getEstudianteInfoFinanzas, getEstudianteInfoF,
-        getMaxIdPersona, addTipoPersona 
+        getMaxIdPersona, getConvenioHistorial, addTipoPersona 
         } = require('../controllers/tipoPersona.controller');
 
 tipoPersonaRouter.route('/')
@@ -10,6 +10,9 @@ tipoPersonaRouter.route('/')
     .post(addTipoPersona);
 
 tipoPersonaRouter.route('/:idRol')
+    .get(getTipoPersona);
+
+tipoPersonaRouter.route('/historialConvenio/:idConvenio')
     .get(getTipoPersona);
 
 tipoPersonaRouter.route('/estDep/:idDep')

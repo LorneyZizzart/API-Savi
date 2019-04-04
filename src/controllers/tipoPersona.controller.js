@@ -135,6 +135,29 @@ module.exports = {
                     "ORDER BY pe.primerApellido ASC";
         cmdSQL(query, res);
     },
+    //Buscar estudiante X EL idConvenio PARA ver su historial de acreedor
+    getConvenioHistorial: (req, res) => {
+        var query = "SELECT pe.idPersona, pe.codEstudiante, us.idUsuario, us.idRol, co.idConvenio, de.idDepartamento, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, ca.idCarrera, ca.nombre as carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
+                    "us.estado as estadoUsuario, " +
+                    "de.idDepartamento, de.nombre as departamento, " +
+                    "ar. nombre as nombreArea, " +
+                    "be.idBeca, be.nombre as beca, " + 
+                    "co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio " +
+                    "FROM Persona pe, Usuario us, Convenio co, Departamento de, Beca be, Area ar, AsignacionArea aa, Carrera ca " +
+                    "WHERE pe.idPersona = us.idPersona " +
+                    "AND pe.idPersona = co.idPersona " +
+                    "AND pe.idCarrera = ca.idCarrera " +
+                    "AND co.idDepartamento = de.idDepartamento " +
+                    "AND co.idBeca = be.idBeca " +
+                    "AND de.idDepartamento = ar.idDepartamento " +
+                    "AND ar.idArea = aa.idArea " +
+                    "AND aa.idConvenio = co.idConvenio " +
+                    "AND co.idConvenio = " + req.params.idConvenio
+                    "AND us.idRol = 5 " +
+                    "AND aa.delet IS NULL " +
+                    "ORDER BY pe.primerApellido ASC";
+        cmdSQL(query, res);
+    },
     getMaxIdPersona: (req, res) => {
         var query = "SELECT max(idPersona) as idPersona FROM Persona";
         cmdSQL(query, res);

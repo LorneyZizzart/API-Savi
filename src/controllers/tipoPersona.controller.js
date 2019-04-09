@@ -143,7 +143,7 @@ module.exports = {
                     "ar. nombre as nombreArea, " +
                     "be.idBeca, be.nombre as beca, " + 
                     "co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio " +
-                    "FROM Persona pe, Usuario us, Convenio co, Departamento de, Beca be, Area ar, AsignacionArea aa, Carrera ca " +
+                    "FROM Persona pe, Usuario us, Convenio co, Departamento de, Beca be, Area ar, AsignacionArea aa, Carrera ca  " +
                     "WHERE pe.idPersona = us.idPersona " +
                     "AND pe.idPersona = co.idPersona " +
                     "AND pe.idCarrera = ca.idCarrera " +
@@ -152,10 +152,9 @@ module.exports = {
                     "AND de.idDepartamento = ar.idDepartamento " +
                     "AND ar.idArea = aa.idArea " +
                     "AND aa.idConvenio = co.idConvenio " +
-                    "AND co.idConvenio = " + req.params.idConvenio
+                    "AND co.idConvenio = " + req.params.idConvenio + " " +
                     "AND us.idRol = 5 " +
-                    "AND aa.delet IS NULL " +
-                    "ORDER BY pe.primerApellido ASC";
+                    "AND aa.delet IS NULL ";
         cmdSQL(query, res);
     },
     getMaxIdPersona: (req, res) => {

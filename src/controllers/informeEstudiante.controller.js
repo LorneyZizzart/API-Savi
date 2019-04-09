@@ -96,6 +96,19 @@ module.exports = {
 
         cmdSQL(query, res);
     },
+    //lista los informes estudiante por numero de convenio
+    getAcreedorHistorial: (req, res) =>{
+        var query = "SELECT inE.idInformeEstudiante, inE.idRegistroHora, inE.fecha , inE.totalHoras, inE.totalSaldo, inE.aprobadoJefeDep, inE.aprobadoFinanzas, inE.revisadoFinanzas, inE.archivar, " +
+                    "reH.idConvenio, reH.fechaHoraEntrada, reH.fechaHoraSalida, reH.observacion, reH.aprobado, reH.edit " + 
+                    "FROM InformeEstudiante inE, RegistroHora reH " +
+                    "WHERE reH.idRegistroHora = inE.idRegistroHora " +
+                    "AND reH.idConvenio = " + req.params.idConvenio + " " +
+                    "AND reH.delet IS NULL " +
+                    "AND inE.delet IS NULL " +
+                    "AND reH.aprobado = 1";
+                    
+        cmdSQL(query, res);
+    },
     //para generar un informe del jefe
     addInformeEstudiante: (req, res) => {
 

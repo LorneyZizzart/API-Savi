@@ -13,7 +13,7 @@ tipoPersonaRouter.route('/:idRol')
     .get(getTipoPersona);
 
 tipoPersonaRouter.route('/historialConvenio/:idConvenio')
-    .get(getTipoPersona);
+    .get(getConvenioHistorial);
 
 tipoPersonaRouter.route('/estDep/:idDep')
     .get(getEstudianteDepartamento);

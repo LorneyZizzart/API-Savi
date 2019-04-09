@@ -1,6 +1,7 @@
 const informeEstudianteRouter = require('express').Router();
 
-const { getInformeEstudianteAll, getInformeEstudiante, getInformeEstudianteArchivados,
+const { getInformeEstudianteAll, getInformeEstudiante, 
+    getInformeEstudianteArchivados, getAcreedorHistorial,
     addInformeEstudiante, 
     updateAprobarFinanzas, updateInformeArchivar, 
     deleteInformeEstudiante } = require('../controllers/informeEstudiante.controller');
@@ -18,6 +19,9 @@ informeEstudianteRouter.route('/archivar/:id')
 
 informeEstudianteRouter.route('/:idDepto')
     .get(getInformeEstudiante);
+
+informeEstudianteRouter.route('/acreedorHistorial/:idConvenio')
+    .get(getAcreedorHistorial);
 
 informeEstudianteRouter.route('/:fecha/:idRH')
     .delete(deleteInformeEstudiante);

@@ -1,6 +1,6 @@
 const peopleRouter = require('express').Router();
 
-const { getPeoples, getPeople, addPeople, updatePeople, deletePeople } = require('../controllers/people.controller');
+const { getPeoples, getPeople, getCodEstudiante, addPeople, updatePeople, deletePeople } = require('../controllers/people.controller');
 
 peopleRouter.route('/')
     .get(getPeoples)
@@ -10,5 +10,8 @@ peopleRouter.route('/:id')
     .get(getPeople)
     .put(updatePeople)
     .delete(deletePeople);
+
+peopleRouter.route('/search/codStudent/:codStudente')
+    .get(getCodEstudiante);
 
 module.exports = peopleRouter;

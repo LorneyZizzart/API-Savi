@@ -10,7 +10,7 @@ async function cmdSQL(query, res) {
         res.status(200).json(rows);
         sql.close();
     }).catch(err => {
-        res.status(500).send({ message: "${err}"})
+        res.status(500).send({ state: false, message: 'Invalid command'})
         sql.close();
     })
 }
@@ -43,11 +43,21 @@ module.exports = {
         var query = 'SELECT * FROM Persona WHERE idPersona = ' + req.params.id;
         cmdSQL(query, res);
     },
+    //Verificar si codEstudiante existe
+    getCodEstudiante: (req, res) => {
+        var query = 'SELECT codEstudiante ' +
+                    'FROM Persona ' +
+                    'WHERE codEtudiante = ' + req.params.codStudente;
+        cmdSQL(query, res);
+    },
     addPeople: (req, res) => {
-        var codEstudiante, segundoNombre, segundoApellido, semestre, fechaNac;
+        var idCarrera, codEstudiante, segundoNombre, segundoApellido, semestre, fechaNac;
+
+        if(req.body.idCarrera == null){idCarrera = null;}
+        else{ idCarrera = parseInt(req.body.codEstudiante);}
 
         if(req.body.codEstudiante == null){codEstudiante = null;}
-        else{ codEstudiante = "'" + req.body.codEstudiante + "'";}
+        else{ codEstudiante = parseInt(req.body.codEstudiante);}
 
         if(req.body.segundoNombre == null){segundoNombre = null;}
         else{ segundoNombre = "'" + req.body.segundoNombre + "'";}
@@ -59,7 +69,7 @@ module.exports = {
         else{ semestre = "'" + req.body.semestre + "'";}
 
         var query = "INSERT INTO Persona VALUES(" +
-            parseInt(req.body.idCarrera) + ", " +
+            idCarrera + ", " +
             codEstudiante + ", '" +
             req.body.primerNombre + "', " +
             segundoNombre + ", '" +

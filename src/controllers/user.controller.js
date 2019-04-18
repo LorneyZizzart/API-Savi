@@ -68,8 +68,7 @@ module.exports = {
 
         cmdSQL(query, res);
     },
-    updateUser: (req, res) => {
-        console.log(req.body);     
+    updateUser: (req, res) => {   
         var query = "UPDATE Usuario SET " +
             "idRol = " + req.body.idRol + ", " +
             "usuario = '" + req.body.usuario + "', " +

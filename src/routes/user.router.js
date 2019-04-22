@@ -1,6 +1,6 @@
 const userRouter = require('express').Router();
 
-const { getUsers, getUser, getVerificarUser, addUser, updateUser, deleteUser } = require('../controllers/user.controller');
+const { getUsers, getUser, getVerificarUser, searchUser, addUser, updateUser, deleteUser } = require('../controllers/user.controller');
 //no esta funcionando
 //const { user } = require('../db/database.js');
 
@@ -16,6 +16,8 @@ userRouter.route('/:id')
 userRouter.route('/:id/:idPersona')
     .put(updateUser)
 
+userRouter.route('/search/name/:usuario')
+    .get(searchUser)
 
 userRouter.route('/verificarUser/')
     .post(getVerificarUser);

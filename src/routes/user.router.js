@@ -1,12 +1,12 @@
 const userRouter = require('express').Router();
 
 const { getUsers, getUser, getVerificarUser, searchUser, addUser, updateUser, deleteUser } = require('../controllers/user.controller');
-//no esta funcionando
-//const { user } = require('../db/database.js');
 
 userRouter.route('/')
-    .get(getUsers)
     .post(addUser);
+
+userRouter.route('/search/users/:idRol')
+    .get(getUsers);
 
 userRouter.route('/:id')
     .get(getUser)

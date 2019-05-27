@@ -45,14 +45,12 @@ module.exports = {
     },
     //Verificar si codEstudiante existe
     getCodEstudiante: (req, res) => {
-        var query = 'SELECT codEstudiante ' +
-                    'FROM Persona ' +
-                    'WHERE codEtudiante = ' + req.params.codStudente;
+        var query = 'SELECT codEstudiante FROM Persona WHERE codEstudiante = '+ req.params.codStudente + ' AND delet IS NULL';
         cmdSQL(query, res);
     },
     addPeople: (req, res) => {
         var idCarrera, codEstudiante, segundoNombre, segundoApellido, semestre, fechaNac;
-
+        console.log(req.body);
         if(req.body.idCarrera == null){idCarrera = null;}
         else{ idCarrera = parseInt(req.body.codEstudiante);}
 
@@ -87,8 +85,11 @@ module.exports = {
     },
     updatePeople: (req, res) => {
 
-        var codEstudiante, segundoNombre, segundoApellido, carrera, semestre;
+        var idCarrera, codEstudiante, segundoNombre, segundoApellido, carrera, semestre;
         
+        if(req.body.idCarrera == null){idCarrera = null;}
+        else{ idCarrera = parseInt(req.body.idCarrera);}
+
         if(req.body.codEstudiante == null){codEstudiante = null;}
         else{ codEstudiante = "'" + req.body.codEstudiante + "'";}
 
@@ -104,9 +105,8 @@ module.exports = {
         if(req.body.semestre == null){semestre = null;}
         else{ semestre = "'" + req.body.semestre + "'";}
 
-        console.log(req.body);
-
         var query = "UPDATE Persona SET " +
+                    "idCarrera = " + idCarrera + ", " +
                     "codEstudiante = " + codEstudiante + ", " +
                     "primerNombre = '" + req.body.primerNombre + "', " +
                     "segundoNombre = " + segundoNombre + ", " +

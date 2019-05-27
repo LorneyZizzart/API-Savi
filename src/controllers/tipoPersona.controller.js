@@ -36,13 +36,12 @@ function dateNow(){
 module.exports = {
     getTipoPersona: (req, res) => {
         //se utiliza para realizar el convenio se lista a todos los estudiantes
-        var query = "SELECT pe.idPersona, us.idUsuario, us.idRol, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.ci, ca.idCarrera, ca.nombre as carrera, pe.semestre, pe.nacionalidad, pe.direccion, pe.celular, pe.fechaNacimiento, " +
+        var query = "SELECT pe.idPersona, pe.idCarrera, us.idUsuario, us.idRol, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.ci, pe.semestre, pe.nacionalidad, pe.direccion, pe.celular, pe.fechaNacimiento, " +
                     "pe.estado as estadoPersona, us.estado as estadoUsuario " +
-                    "FROM Persona pe, Usuario us, Carrera ca " +
+                    "FROM Persona pe, Usuario us " +
                     "WHERE pe.idPersona = us.idPersona " +
-                    "AND pe.idCarrera = ca.idCarrera " +
                     "AND us.delet IS NULL " +
-                    "AND us.idRol = " + req.params.idRol;
+                    "AND us.idRol = " + req.params.idRol + " ORDER BY pe.primerApellido ASC ";
         cmdSQL(query, res);
     },
     //Listar los estudiantes x departamento que estan activos 

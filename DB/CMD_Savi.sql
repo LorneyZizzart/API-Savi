@@ -19,6 +19,9 @@ INSERT INTO Carrera VALUES('Psicopedagogía', '2019/05/31', NULL, NULL, 1)
 INSERT INTO Carrera VALUES('Actividad fisica y deportes', '2019/05/31', NULL, NULL, 1)
 INSERT INTO Carrera VALUES('Teología', '2019/05/31', NULL, NULL, 1)
 
+-- Departamento
+INSERT 
+
 -- Persona
 INSERT INTO Persona VALUES(null, null, 'Jhonny', null, 'Gutierrez', 'Villca', '8282702', null, 'Bolivia', 'Calle 1', 60607170, '1994/11/09', 1, '2019/05/27', null, null);
 INSERT INTO Persona VALUES(NULL, NULL, 'Luis', 'Fernando', 'Gutierrez', 'Villca', '123456', NULL, 'Bolivia', 'Calle 2', 78932111, '1998/09/12', 1, '2019/05/27', NULL, NULL);

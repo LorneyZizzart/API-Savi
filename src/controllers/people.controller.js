@@ -40,7 +40,9 @@ module.exports = {
         cmdSQL(query, res);
     },
     getPeople: (req, res) => {
-        var query = 'SELECT * FROM Persona WHERE idPersona = ' + req.params.id;
+        var query = "SELECT idCarrera, codEstudiante, primerNombre, segundoNombre, primerApellido, segundoApellido, ci, semestre, nacionalidad, direccion, celular, fechaNacimiento, estado as estadoPersona, register as fechaRegistroPersona, edit as editPersona " +
+                    "FROM Persona " +
+                    "WHERE idPersona =" + req.params.id;
         cmdSQL(query, res);
     },
     //Verificar si codEstudiante existe
@@ -50,7 +52,7 @@ module.exports = {
     },
     addPeople: (req, res) => {
         var idCarrera, codEstudiante, segundoNombre, segundoApellido, semestre, fechaNac;
-        console.log(req.body);
+        
         if(req.body.idCarrera == null){idCarrera = null;}
         else{ idCarrera = parseInt(req.body.codEstudiante);}
 

@@ -20,7 +20,8 @@ INSERT INTO Carrera VALUES('Actividad fisica y deportes', '2019/05/31', NULL, NU
 INSERT INTO Carrera VALUES('Teología', '2019/05/31', NULL, NULL, 1)
 
 -- Departamento
-INSERT 
+INSERT INTO Departamento VALUES('Limpieza', '2019/05/31', 1, NULL, NULL);
+INSERT INTO Departamento VALUES('Biblioteca', '2019/05/31', 1, NULL, NULL);
 
 -- Persona
 INSERT INTO Persona VALUES(null, null, 'Jhonny', null, 'Gutierrez', 'Villca', '8282702', null, 'Bolivia', 'Calle 1', 60607170, '1994/11/09', 1, '2019/05/27', null, null);
@@ -47,3 +48,9 @@ INSERT INTO Usuario VALUES(3, 2, 'miguel123', 'miguel123', 1, '2019/05/27', NULL
 INSERT INTO Usuario VALUES(4, 3, 'josue123', 'josue123', 1, '2019/05/27', NULL, NULL);
 INSERT INTO Usuario VALUES(5, 4, 'josias123', 'josias123', 1, '2019/05/27', NULL, NULL);
 INSERT INTO Usuario VALUES(6, 5, 'nayeli123', 'nayeli123', 1, '2019/05/27', NULL, NULL);
+
+--Historial Departamento
+INSERT INTO HistorialDepartamento VALUES(1, 33, '7', '2019/05/27', 1, NULL, NULL)
+
+--Organizacion
+INSERT INTO Organizacion VALUES(1, 5, '2019/05/27', 1, NULL, NULL)

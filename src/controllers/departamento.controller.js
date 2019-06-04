@@ -42,18 +42,8 @@ module.exports = {
         cmdSQL(query, res);
     },
     getDepartamentos: (req, res) => {
-        //Departamentos con Jefe dep, y con su historial
-        var query = "SELECT idDepartamento, nombre as nombreDepartamento, fechaRegistro as fechaRegistroDepartamento, estado as estadoDepartamento, edit as fechaEditDepartamento FROM Departamento AND delet IS NULL ORDER BY nombre ASC";
-        // var query = "SELECT de.idDepartamento, de.nombre as nombreDepartamento, de.fechaRegistro as fechaRegistroDepartamento, de.estado as estadoDepartamento, " +
-        //             "pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
-        //             "hd.limiteEstudiante, hd.costoHora, hd.fechaRegistro as fechaRegistroHistorialDep, " +
-        //             "org.idOrganizacion, org.fechaRegistro as fechaRegistroOrganizacion, org.estado as estadoOrganizacion " +
-        //             "FROM Departamento de, Persona pe, Organizacion org, HistorialDepartamento hd " +
-        //             "WHERE hd.idDepartamento = de.idDepartamento " +
-        //             "AND de.idDepartamento = org.idDepartamento " +
-        //             "AND org.idPersona = pe.idPersona " +
-        //             "AND hd.estado = 1 " +
-        //             "ORDER BY de.nombre ASC";
+        //Lista de los departamentos [Modulo Departamento]
+        var query = "SELECT idDepartamento, nombre as nombreDepartamento, fechaRegistro as fechaRegistroDepartamento, estado as estadoDepartamento, edit as fechaEditDepartamento FROM Departamento WHERE delet IS NULL ORDER BY nombre ASC";
         cmdSQL(query, res);
     },
     //Obtener todos los datos de un departamento -> se lo utiliza en informe de hoy

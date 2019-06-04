@@ -40,6 +40,12 @@ module.exports = {
         var query = "SELECT MAX(idDepartamento) as idDepartamento FROM Departamento";
         cmdSQL(query, res);
     },
+    getHistorialDepartamento: (req, res) => {
+        var query = "SELECT idHistorialDepartamento, idDepartamento, limiteEstudiante, costoHora, fechaRegistro as fechaRegistroHistotialDepartamento, estado as estadoHistorialDepartamento, edit as editHistorialDepartamento " +
+                    "FROM HistorialDepartamento " +
+                    "WHERE estado = 1 AND idDepartamento = " + req.params.id;
+        cmdSQL(query, res);
+    },
     addHistorialDepartamento: (req, res) => {
 
         var query = "INSERT INTO HistorialDepartamento VALUES (" +

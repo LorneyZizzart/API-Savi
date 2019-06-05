@@ -46,6 +46,10 @@ module.exports = {
         var query = "SELECT idDepartamento, nombre as nombreDepartamento, fechaRegistro as fechaRegistroDepartamento, estado as estadoDepartamento, edit as fechaEditDepartamento FROM Departamento WHERE delet IS NULL ORDER BY nombre ASC";
         cmdSQL(query, res);
     },
+    getDepartamentoName: (req, res) => {
+        var query = "SELECT * FROM Departamento WHERE nombre = '" + req.params.nameDepto +"'";
+        cmdSQL(query, res);
+    },
     //Obtener todos los datos de un departamento -> se lo utiliza en informe de hoy
     getDepartamento: (req, res) => {
         var query = "SELECT de.idDepartamento, de.nombre as nombreDepartamento, de.fechaRegistro as fechaRegistroDepartamento, de.estado as estadoDepartamento, " +

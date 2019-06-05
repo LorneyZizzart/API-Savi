@@ -15,6 +15,13 @@ async function cmdSQL(query, res) {
         sql.close();
     })
 }
+//un auxiliar cmd 
+async function requestSQL(query){
+    sql.connect(config).then(() => {
+        return sql.query(query)
+    }).then(result => {
+    })
+}
 
 function dateNow(){
     var fechaRegistro = new Date();
@@ -36,8 +43,11 @@ function dateNow(){
 
 
 module.exports = {
+    //Obtencion de todo el historial de un solo departamento
     getHistorialDepartamentos: (req, res) => {
-        var query = "SELECT MAX(idDepartamento) as idDepartamento FROM Departamento";
+        var query = "SELECT idHistorialDepartamento, idDepartamento, limiteEstudiante, costoHora, fechaRegistro as fechaRegistroHistorialDepartamento, estado as estadoHistorialDepartamento, edit as editHistorialDepartamento " +
+                    "FROM HistorialDepartamento " +
+                    "WHERE idDepartamento = " + req.params.id;
         cmdSQL(query, res);
     },
     getHistorialDepartamento: (req, res) => {
@@ -56,6 +66,23 @@ module.exports = {
         cmdSQL(query, res);
     },
     //cuando se actualize al registro anterior se pondra en estado false
-    updateHistorialDepartamento: (req, res) => {},
+    updateEstadoHistorialDepartamento: (req, res) => {
+
+        if(req.body.estadoHistorialDepartamento == '1'){
+            var queryAux = "UPDATE HistorialDepartamento SET " +
+                        "estado = 0 " +
+                        "WHERE idDepartamento = " + req.body.idDepartamento;
+            requestSQL(queryAux);
+        }
+
+        console.log(req.body);
+
+        var query = "UPDATE HistorialDepartamento SET " +
+                    "estado = " + req.body.estadoHistorialDepartamento + ", " +
+                    "edit = '" + dateNow() + "' "+
+                    "WHERE idHistorialDepartamento = " + req.params.id;
+
+        cmdSQL(query, res);
+    },
     deleteHistorialDepartamento: (req, res) => {}
 };

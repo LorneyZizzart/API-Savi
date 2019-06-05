@@ -51,6 +51,7 @@ INSERT INTO Usuario VALUES(6, 5, 'nayeli123', 'nayeli123', 1, '2019/05/27', NULL
 
 --Historial Departamento
 INSERT INTO HistorialDepartamento VALUES(1, 33, '7', '2019/05/27', 1, NULL, NULL)
+INSERT INTO HistorialDepartamento VALUES(1, 30, '6.50', '2019/05/27', 0, NULL, NULL)
 
 --Organizacion
 INSERT INTO Organizacion VALUES(1, 5, '2019/05/27', 1, NULL, NULL)

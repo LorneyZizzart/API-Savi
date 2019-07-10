@@ -18,7 +18,8 @@ async function cmdSQL(query, res) {
 //un auxiliar cmd 
 async function requestSQL(query){
     sql.connect(config).then(() => {
-        return sql.query(query)
+        sql.query(query);
+        return true;
     }).then(result => {
     })
 }
@@ -47,23 +48,31 @@ module.exports = {
     getHistorialDepartamentos: (req, res) => {
         var query = "SELECT idHistorialDepartamento, idDepartamento, limiteEstudiante, costoHora, fechaRegistro as fechaRegistroHistorialDepartamento, estado as estadoHistorialDepartamento, edit as editHistorialDepartamento " +
                     "FROM HistorialDepartamento " +
-                    "WHERE idDepartamento = " + req.params.id;
+                    "WHERE delet IS NULL AND idDepartamento = " + req.params.id;
         cmdSQL(query, res);
     },
     getHistorialDepartamento: (req, res) => {
-        var query = "SELECT idHistorialDepartamento, idDepartamento, limiteEstudiante, costoHora, fechaRegistro as fechaRegistroHistotialDepartamento, estado as estadoHistorialDepartamento, edit as editHistorialDepartamento " +
+        var query = "SELECT idHistorialDepartamento, idDepartamento, limiteEstudiante, costoHora, fechaRegistro as fechaRegistroHistorialDepartamento, estado as estadoHistorialDepartamento, edit as editHistorialDepartamento " +
                     "FROM HistorialDepartamento " +
                     "WHERE estado = 1 AND idDepartamento = " + req.params.id;
         cmdSQL(query, res);
     },
     addHistorialDepartamento: (req, res) => {
 
-        var query = "INSERT INTO HistorialDepartamento VALUES (" +
+        var queryAux = "UPDATE HistorialDepartamento SET " +
+                        "estado = 0 " +
+                        "WHERE idDepartamento = " + req.body.idDepartamento;
+        
+        if(requestSQL(queryAux)){
+            var query = "INSERT INTO HistorialDepartamento VALUES (" +
             req.body.idDepartamento + ", " +
             req.body.limiteEstudiante + ", '" +
             req.body.costoHora + "', '" + 
-            dateNow() + "', 1, null, null)";
-        cmdSQL(query, res);
+            dateNow() + "', 1, '"+dateNow()+"', null)";
+            cmdSQL(query, res);
+        }
+
+        
     },
     //cuando se actualize al registro anterior se pondra en estado false
     updateEstadoHistorialDepartamento: (req, res) => {
@@ -75,8 +84,6 @@ module.exports = {
             requestSQL(queryAux);
         }
 
-        console.log(req.body);
-
         var query = "UPDATE HistorialDepartamento SET " +
                     "estado = " + req.body.estadoHistorialDepartamento + ", " +
                     "edit = '" + dateNow() + "' "+
@@ -84,5 +91,21 @@ module.exports = {
 
         cmdSQL(query, res);
     },
-    deleteHistorialDepartamento: (req, res) => {}
+    updateHistorialDepartamento: (req, res) => {
+
+        var query = "UPDATE HistorialDepartamento SET " +
+                    "limiteEstudiante = " + req.body.limiteEstudiante + ",  " +
+                    "costoHora = " + req.body.costoHora + ", " +
+                    "edit = '" + dateNow() + "' "+
+                    "WHERE idHistorialDepartamento = " + req.params.id;
+
+        cmdSQL(query, res);
+    },
+    deleteHistorialDepartamento: (req, res) => {
+        var query = "UPDATE HistorialDepartamento SET " +
+                    "delet = '" + dateNow() + "' "+
+                    "WHERE idHistorialDepartamento = " + req.params.id;
+
+        cmdSQL(query, res);
+    }
 };

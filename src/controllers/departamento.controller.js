@@ -47,7 +47,22 @@ module.exports = {
         cmdSQL(query, res);
     },
     getDepartamentoName: (req, res) => {
-        var query = "SELECT * FROM Departamento WHERE nombre = '" + req.params.nameDepto +"'";
+        var query = "SELECT * FROM Departamento WHERE nombre = '" + req.params.nameDepto +"' AND delet IS NULL";
+        cmdSQL(query, res);
+    },
+    //Obtener todos los departamentos del jefe de departamento
+    getDepartamentosUser: (req, res) => {
+        var query = "SELECT de.idDepartamento, de.nombre as nombreDepartamento, de.estado as estadoDepartamento, de.edit as editDepartamento " +
+                    "FROM Departamento de, Usuario us, Rol ro, Persona pe, Organizacion org " +
+                    "WHERE us.idRol = ro.idRol " +
+                    "AND us.idPersona = pe.idPersona " +
+                    "AND pe.idPersona = org.idPersona " +
+                    "AND org.idDepartamento = de.idDepartamento " +
+                    "AND de.delet IS NULL " +
+                    "AND org.delet IS NULL " +
+                    "AND org.estado = 1 " +
+                    "AND ro.idRol = " + req.params.idRol + " " +
+                    "AND us.idUsuario = " + req.params.idUser + " ORDER BY de.nombre ASC";
         cmdSQL(query, res);
     },
     //Obtener todos los datos de un departamento -> se lo utiliza en informe de hoy
@@ -66,17 +81,18 @@ module.exports = {
         cmdSQL(query, res);
     },
     addDepartamento: (req, res) => {
-        console.log("'"+dateNow()+"'");
         var query = "INSERT INTO Departamento VALUES ( '" +
             req.body.nombreDepartamento + "', '" +
-            dateNow() + "', 1, null, null)";
+            dateNow() + "', 1, '"+dateNow()+"', null)";
         cmdSQL(query, res);
     },
     updateDepartamento: (req, res) => {
 
+        console.log("departamento: ", req.body);
+
         var query = "UPDATE Departamento SET " +
-            "nombre = '" + req.body.nombre + "', " +
-            "estado = " + req.body.estado + ", " +
+            "nombre = '" + req.body.nombreDepartamento + "', " +
+            "estado = " + req.body.estadoDepartamento + ", " +
             "edit = '" + dateNow() + "' "+
             " WHERE idDepartamento = " + req.params.id;
 

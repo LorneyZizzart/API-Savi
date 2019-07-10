@@ -53,5 +53,12 @@ INSERT INTO Usuario VALUES(6, 5, 'nayeli123', 'nayeli123', 1, '2019/05/27', NULL
 INSERT INTO HistorialDepartamento VALUES(1, 33, '7', '2019/05/27', 1, NULL, NULL)
 INSERT INTO HistorialDepartamento VALUES(1, 30, '6.50', '2019/05/27', 0, NULL, NULL)
 
---Organizacion
+-- Organizacion
 INSERT INTO Organizacion VALUES(1, 5, '2019/05/27', 1, NULL, NULL)
+
+-- BECA
+INSERT INTO Beca VALUES ('Beca Industrial', 1, '2019/05/27', '2019/05/27', NULL)
+INSERT INTO Beca VALUES ('Beca Institucional', 1, '2019/05/27', '2019/05/27', NULL)
+
+-- Convenio
+INSERT INTO Convenio VALUES(1, 6, 2, '2019/01/05', '2019/06/29', 1, 1, 1, '2019/05/27', '2019/05/27', NULL)

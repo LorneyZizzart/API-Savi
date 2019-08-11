@@ -69,7 +69,7 @@ module.exports = {
     getDepartamento: (req, res) => {
         var query = "SELECT de.idDepartamento, de.nombre as nombreDepartamento, de.fechaRegistro as fechaRegistroDepartamento, de.estado as estadoDepartamento, " +
                     "pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
-                    "hd.limiteEstudiante, hd.costoHora, hd.fechaRegistro as fechaRegistroHistorialDep, " +
+                    "hd.limiteEstudiante, hd.costoHora, hd.fechaRegistro as fechaRegistroHistorialDepartamento, hd.edit as editHistorialDepartamento, " +
                     "org.idOrganizacion, org.fechaRegistro as fechaRegistroOrganizacion, org.estado as estadoOrganizacion " +
                     "FROM Departamento de, Persona pe, Organizacion org, HistorialDepartamento hd " +
                     "WHERE hd.idDepartamento = de.idDepartamento " +

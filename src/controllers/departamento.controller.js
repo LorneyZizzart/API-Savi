@@ -35,6 +35,7 @@ function dateNow(){
 }
 
 
+
 module.exports = {
     //se utiliza para realizar el convenio
     getAllDepartamentos: (req, res) =>{
@@ -62,7 +63,7 @@ module.exports = {
                     "AND org.delet IS NULL " +
                     "AND org.estado = 1 " +
                     "AND ro.idRol = " + req.params.idRol + " " +
-                    "AND us.idUsuario = " + req.params.idUser + " ORDER BY de.nombre ASC";
+                    "AND us.idUsuario = " + req.params.idUser + " AND de.estado = 1";
         cmdSQL(query, res);
     },
     //Obtener todos los datos de un departamento -> se lo utiliza en informe de hoy

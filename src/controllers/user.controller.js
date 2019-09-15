@@ -71,6 +71,7 @@ module.exports = {
         cmdSQL(query, res);
     },//para el login 
     getVerificarUser: (req, res) => {
+        console.log("hola");
         var query = "SELECT * FROM Usuario WHERE usuario = '" + req.body.usuario + "' AND password = '" + req.body.password + "' AND delet IS NULL";
         cmdSQL(query, res);
     },//para verificar si el nombre de usuario existe

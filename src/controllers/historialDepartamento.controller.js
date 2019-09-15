@@ -44,11 +44,14 @@ function dateNow(){
 
 
 module.exports = {
-    //Obtencion de todo el historial de un solo departamento
+    //Obtencion todo el historial de un solo departamento
     getHistorialDepartamentos: (req, res) => {
-        var query = "SELECT idHistorialDepartamento, idDepartamento, limiteEstudiante, costoHora, fechaRegistro as fechaRegistroHistorialDepartamento, estado as estadoHistorialDepartamento, edit as editHistorialDepartamento " +
-                    "FROM HistorialDepartamento " +
-                    "WHERE delet IS NULL AND idDepartamento = " + req.params.id;
+        var query = "SELECT de.idDepartamento, de.nombre as nombreDepartamento, de.fechaRegistro as fechaRegistroDepartamento, de.estado as estadoDepartameto, de.edit as editDepartamento, de.delet as deletDepartamento, " +
+                    "hd.idHistorialDepartamento, hd.limiteEstudiante, hd.costoHora, hd.fechaRegistro as fechaRegistroHistorialDepartamento, hd.estado as estadoHistorialDepartamento, hd.edit as editHistorialDepartamento, hd.delet as deletHistorialDepartamento " +
+                    "FROM Departamento de, HistorialDepartamento hd " +
+                    "WHERE de.idDepartamento = hd.idDepartamento " +
+                    "AND hd.delet IS NULL AND de.idDepartamento = " + req.params.id + " ORDER BY hd.fechaRegistro aSC";
+
         cmdSQL(query, res);
     },
     getHistorialDepartamento: (req, res) => {

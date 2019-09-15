@@ -1,7 +1,7 @@
 const config = {
     user: 'sa',
-    password: "password",
-    server: "127.0.0.1",
+    password: "1844",
+    server: "192.168.3.30",
     database: "Savi"
 };
 

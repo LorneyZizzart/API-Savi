@@ -42,7 +42,9 @@ module.exports = {
     },
     //
     getCarrera: (req, res) =>{
-        var query = "SELECT * FROM Carrera WHERE idCarrera = " + req.params.idCarrera;
+        var query = "SELECT idCarrera, nombre as nombreCarrera, estado as estadoCarrera, register as registerCarrera " +
+                    "FROM Carrera " +
+                    "WHERE idCarrera = " + req.params.idCarrera;
         cmdSQL(query, res);
     },
     addCarrera: (req, res) => {

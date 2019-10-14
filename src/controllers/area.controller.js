@@ -67,8 +67,7 @@ module.exports = {
 
         var query = "UPDATE Area SET " +
             "nombre = '" + req.body.nombreArea + "', " +
-            "estado = " + req.body.estadoArea + ", " +
-            "edit = '" + req.body.estadoArea + "' " +
+            "edit = '" + dateNow() + "' " +
             "WHERE idArea = " + req.params.id;
 
         cmdSQL(query, res);
@@ -93,15 +92,24 @@ module.exports = {
         var query = "SELECT aa.idAsignacionArea, aa.idConvenio, aa.idArea, aa.fechaRegistro as fechaRegistroAsignacion, aa.estado as estadoAsignacion, " +
                     "de.idDepartamento, " +
                     "ar.nombre as nombreArea, " +
-                    "pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido " +
+                    "pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido " +
                     "FROM AsignacionArea aa, Persona pe, Departamento de, Convenio co, Area ar " +
-                    "WHERE pe.idPersona = co.idPersona " +
-                    "AND co.idDepartamento = de.idDepartamento " +
-                    "AND de.idDepartamento = ar.idDepartamento " +
-                    "AND ar.idArea = aa.idArea " +
+                    "WHERE ar.idArea = aa.idArea " +
                     "AND aa.idConvenio = co.idConvenio " +
+                    "AND co.idDepartamento = de.idDepartamento " +
+                    "AND co.idPersona = pe.idPersona " +
+                    "AND aa.idArea = " + req.params.idArea + " " +
                     "AND aa.delet IS NULL " +
-                    "AND de.idDepartamento = " + req.params.idDept + " AND co.estado = 1 AND co.delet IS NULL " + 
+                    "ORDER BY pe.primerApellido ASC";
+
+        cmdSQL(query, res);
+    },
+    getAreByConvenio: (req, res) => {
+        var query = "SELECT ar.idArea, ar.idDepartamento, ar.nombre as nombreArea, ar.estado as estadoArea " +
+                    "FROM AsignacionArea aa, Area ar " +
+                    "WHERE aa.idArea = ar.idArea " +
+                    "AND aa.idConvenio = " + req.params.idConvenio + " " +
+                    "AND aa.delet IS NULL " +
                     "ORDER BY ar.nombre ASC";
 
         cmdSQL(query, res);
@@ -118,14 +126,22 @@ module.exports = {
         var query = "UPDATE AsignacionArea SET " +
         "estado = " + req.body.estadoAsignacion + ", " +
         "edit = '" + dateNow() + "' " +
-        "WHERE idAsignacionArea = " + req.params.idDept;
+        "WHERE idAsignacionArea = " + req.params.idArea;
 
-    cmdSQL(query, res);
+        cmdSQL(query, res);
+    },
+    updateCambiarArea: (req, res) => {
+        var query = "UPDATE AsignacionArea SET " +
+        "idArea = " + req.body.idArea + ", " +
+        "edit = '" + dateNow() + "' " +
+        "WHERE idAsignacionArea = " + req.params.idAsignacion;
+
+        cmdSQL(query, res);
     },
     deleteAsignacionArea: (req, res) => {
         var query = "UPDATE AsignacionArea SET " +
             "delet = '" + dateNow() + "' " +
-            "WHERE idAsignacionArea = " + req.params.idDept;
+            "WHERE idAsignacionArea = " + req.params.idArea;
 
     cmdSQL(query, res);
     }

@@ -109,6 +109,25 @@ module.exports = {
                     
         cmdSQL(query, res);
     },
+    getInformeEstudianteDelete: (req, res) =>{
+        console.log("entro");
+
+        var query = "SELECT pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, " +
+                    "co.idConvenio, " +
+                    "de.idDepartamento, " +
+                    "rh.idRegistroHora, " +
+                    "ie.idInformeEstudiante, ie.fecha, ie.totalHoras, ie.totalSaldo, ie.aprobadoJefeDep, ie.aprobadoFinanzas, ie.revisadoFinanzas " +
+                    "FROM Departamento de, Convenio co, RegistroHora rh, InformeEstudiante ie, Persona pe " +
+                    "WHERE de.idDepartamento = co.idDepartamento " +
+                    "AND co.idPersona = pe.idPersona " +
+                    "AND co.idConvenio =  rh.idConvenio " +
+                    "AND rh.idRegistroHora = ie.idRegistroHora " +
+                    "AND ie.delet IS NOT NULL " +
+                    "AND de.idDepartamento = " + req.params.id
+                    "ORDER BY ie.fecha ASC";
+                    
+        cmdSQL(query, res);
+    },
     //para generar un informe del jefe
     addInformeEstudiante: (req, res) => {
 
@@ -140,6 +159,15 @@ module.exports = {
             "archivar = NULL " +
             "WHERE idInformeEstudiante = " + req.params.id;
         }       
+
+        cmdSQL(query, res);
+    },
+    // para eliminar el informe del jefe de departamento
+    bajaInformeEstudiante: (req, res) => {
+
+        var query = "UPDATE InformeEstudiante SET " +
+                    "delet = '" + dateNow() + "' " +
+                    "WHERE idInformeEstudiante = " + req.params.idDepto; /* en si es el id del informe para eliminar el informe del jefe de departamento para el usuario jefe de departamento */
 
         cmdSQL(query, res);
     },

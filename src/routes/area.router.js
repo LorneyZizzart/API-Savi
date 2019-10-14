@@ -1,8 +1,8 @@
 const areaRouter = require('express').Router();
 
 const { getAreas, getArea, getAreasDepartamento, addArea, updateArea, 
-        updateEstadoArea, deleteArea, getAsignacionArea, addAsigancionArea,
-        updateAsignacionArea, deleteAsignacionArea
+        updateEstadoArea, deleteArea, getAsignacionArea, getAreByConvenio, addAsigancionArea,
+        updateAsignacionArea, updateCambiarArea, deleteAsignacionArea
         } = require('../controllers/area.controller');
 
 areaRouter.route('/')
@@ -23,10 +23,15 @@ areaRouter.route('/estado/:idArea')
 areaRouter.route('/asignacionArea/crud')
     .post(addAsigancionArea);
 
-areaRouter.route('/asignacionArea/crud/:idDept')
-    .get(getAsignacionArea)
-    .put(updateAsignacionArea)
-    .delete(deleteAsignacionArea);
+areaRouter.route('/asignacionArea/byConvenio/:idConvenio')
+    .get(getAreByConvenio);
 
+areaRouter.route('/asignacionArea/crud/:idArea')
+    .get(getAsignacionArea)
+    .put(updateAsignacionArea) /*aqui se envia el id de asigancion de area*/
+    .delete(deleteAsignacionArea); /*aqui se envia el id de asigancion para dar de baja*/
+
+areaRouter.route('/cambiarArea/:idAsignacion')
+    .put(updateCambiarArea);
 
 module.exports = areaRouter;

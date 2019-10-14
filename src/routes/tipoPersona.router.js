@@ -18,7 +18,7 @@ tipoPersonaRouter.route('/historialConvenio/:idConvenio')
 tipoPersonaRouter.route('/estDep/:idDep')
     .get(getEstudianteDepartamento);
 
-tipoPersonaRouter.route('/infoEstudiante/:idDep')
+tipoPersonaRouter.route('/infoEstudiante/:idDep/:idPersona')
     .get(getEstudianteInfo);
 
 tipoPersonaRouter.route('/finanzas/infoEstudiante/')

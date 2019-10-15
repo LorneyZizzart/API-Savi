@@ -67,7 +67,7 @@ module.exports = {
     },
     //Listar los estudiantes x departamento para informacion 
     getEstudianteInfo: (req, res) => {
-        var query = "SELECT pe.idPersona, co.idConvenio, de.idDepartamento, pe.codEstudiante, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
+        var query = "SELECT pe.idPersona, co.idConvenio, de.idDepartamento, pe.idCarrera, pe.codEstudiante, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
                     "de.idDepartamento, de.nombre as departamento,  " +
                     "be.idBeca, be.nombre as beca, " +
                     "co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio " +

@@ -21,6 +21,8 @@ const acreedorRouter = require('./routes/acreedor.router');
 const acreedorDescuento = require('./routes/descuento.router');
 const carrera = require('./routes/carrera.router');
 const acreedorPendiente = require('./routes/acreedorPendiente.router');
+//API SISTEMA ACADEMICO
+const apiSistemaAcademico = require('./routes/api.sistemaAcademico.router');
 
 //setting
 //app.set('views', path.join(__dirname, 'views'));
@@ -59,6 +61,8 @@ app.use('/acreedor', acreedorRouter)
 app.use('/descuento', acreedorDescuento)
 app.use('/carrera', carrera)
 app.use('/acreedorPendiente', acreedorPendiente)
+// API SISTEMA ACADEMICO
+app.use('/apiSistemaAcademico', apiSistemaAcademico)
 
 //static files
 //start server

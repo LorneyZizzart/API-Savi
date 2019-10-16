@@ -54,15 +54,15 @@ module.exports = {
         var idCarrera, codEstudiante, segundoNombre, segundoApellido, semestre, fechaNac;
         
         if(req.body.idCarrera == null){idCarrera = null;}
-        else{ idCarrera = parseInt(req.body.codEstudiante);}
+        else{ idCarrera = parseInt(req.body.idCarrera);}
 
         if(req.body.codEstudiante == null){codEstudiante = null;}
         else{ codEstudiante = parseInt(req.body.codEstudiante);}
 
-        if(req.body.segundoNombre == null){segundoNombre = null;}
+        if(req.body.segundoNombre == null || req.body.segundoNombre == undefined){segundoNombre = null;}
         else{ segundoNombre = "'" + req.body.segundoNombre + "'";}
 
-        if(req.body.segundoApellido == null){segundoApellido = null;}
+        if(req.body.segundoApellido == null || req.body.segundoApellido == undefined){segundoApellido = null;}
         else{ segundoApellido = "'" + req.body.segundoApellido + "'";}
 
         if(req.body.semestre == null){semestre = null;}

@@ -1,10 +1,10 @@
 const acreedorPendienteRouter = require('express').Router();
 
-const { getAcreedorPendientes, addAcreedorPendiente, 
+const { getAcreedoresPendientes, addAcreedorPendiente, 
     updateAcreedorPendiente, deleteAcreedorPendiente } = require('../controllers/acreedorPendiente.controller');
 
 acreedorPendienteRouter.route('/')
-    .get(getAcreedorPendientes)
+    .get(getAcreedoresPendientes)
     .post(addAcreedorPendiente);
 
 acreedorPendienteRouter.route('/:id')

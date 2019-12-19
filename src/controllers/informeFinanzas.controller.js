@@ -35,8 +35,18 @@ function dateNow(){
 }
 
 module.exports = {
+    // obtenemos un informe de finanzas
+    getInformeFinanzas : (req, res) =>{
+        var query = "SELECT idInformeFinanzas, idUsuario, idInformeEstudiante, totalHoras, totalSaldo, observacion, fechaAprobada, archivar " +
+                    "FROM InformeFinanzas " +
+                    "WHERE delet IS NULL " +
+                    "AND idInformeFinanzas = " +req.params.id;
+
+        cmdSQL(query, res);
+
+    },
     //Informes revisados en finanzas
-    getInformeFinanzas: (req, res) =>{
+    getInformesFinanzas: (req, res) =>{
         var query = "SELECT pe.idPersona, pe.codEstudiante, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, " +
                     "de.idDepartamento, de.nombre as departamento, " +
                     "co.idConvenio, " +
@@ -75,40 +85,41 @@ module.exports = {
         cmdSQL(query, res);
     },
     addInformeFinanzas: (req, res) => {
+
+        
         var observacion = null;
-        if(req.body.obsrevacionFinanzas != undefined){
-            observacion = req.body.obsrevacionFinanzas;
+        if(req.body.observacionFinanzas == null || req.body.observacionFinanzas == undefined){
+            observacion = "NULL";
+        }else{
+            observacion = "'" + req.body.observacionFinanzas + "'";
         }
         var query = "INSERT INTO InformeFinanzas VALUES( " +
             req.body.idUsuario + ", " +
             req.body.idInformeEstudiante + ", '" +
             req.body.totalHorasF + "', '" +
-            req.body.totalSaldoF + "', '" +
-            observacion + "', '" +
+            req.body.totalSaldoF + "', " +
+            observacion + ", '" +
             dateNow() + "', null, null)";
-
+            
         cmdSQL(query, res);
     },
     updateInformeFinanzas: (req, res) => {
-        console.log("infor:",req.body.idUsuario);
-        console.log("infor:",req.body.totalHorasF);
-        console.log("infor:",req.body.totalSaldoF);
-        console.log("infor:",req.body.obsrevacionFinanzas);
+        console.log(req.body);
         var observacion = null;
-        if(req.body.obsrevacionFinanzas != undefined){
-            observacion = "observacion = '" + req.body.obsrevacionFinanzas + "'";
-        }if(req.body.obsrevacionFinanzas == null || req.body.obsrevacionFinanzas == undefined){
-            observacion = "observacion = NULL";
+        if(req.body.observacionFinanzas == null || req.body.observacionFinanzas == undefined){
+            observacion = "NULL";
+        }else{
+            observacion = "'" + req.body.observacionFinanzas + "'";
         }
 
         var query = "UPDATE InformeFinanzas SET " +
             "idUsuario = " + req.body.idUsuario + ", " +
             "totalHoras = '" + req.body.totalHorasF + "', " +
             "totalSaldo = '" + req.body.totalSaldoF + "', " +
-            observacion + ", " +
+            "observacion = '" + req.body.observacionFinanzas + "', " +
             "fechaAprobada = '" + dateNow() + "' " +
             "WHERE idInformeFinanzas = " + req.params.id;               
-
+            console.log("query: "+query);
         cmdSQL(query, res);
     },
     updateInformeFinanzasArchivar: (req, res) => {

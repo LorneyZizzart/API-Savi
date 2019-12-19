@@ -34,7 +34,7 @@ function dateNow(){
         return fechaRegistro = yyyy+'/'+mm+'/'+dd+' '+hh+':'+min+':'+ss+'.000';
 }
 
-module.exports = {
+module.exports = {    
     //Generar informe x departamento
     getInformeEstudiante: (req, res) =>{
         var query = "SELECT ie.idInformeEstudiante, ie.idRegistroHora, co.idConvenio, pe.codEstudiante, pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, ca.idCarrera, ca.nombre as carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
@@ -79,6 +79,7 @@ module.exports = {
         cmdSQL(query, res);
     },//Generar informe para finanzas de todos los departamentos
     getInformeEstudianteAll: (req, res) =>{
+
         var query = "SELECT ie.idInformeEstudiante, co.idConvenio, pe.codEstudiante, pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, " +
                     "rh.idRegistroHora, rh.Observacion as observacionRegistroHora, " +
                     "de.idDepartamento, de.nombre as departamento, " +
@@ -110,7 +111,6 @@ module.exports = {
         cmdSQL(query, res);
     },
     getInformeEstudianteDelete: (req, res) =>{
-        console.log("entro");
 
         var query = "SELECT pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, " +
                     "co.idConvenio, " +

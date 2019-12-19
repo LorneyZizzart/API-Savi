@@ -20,6 +20,7 @@ async function requestSQL(query){
     sql.connect(config).then(() => {
         return sql.query(query)
     }).then(result => {
+        sql.close();
     })
 }
 
@@ -59,6 +60,10 @@ function descuentoCreditos(req, res){
 }
 
 module.exports = {
+    getAcreedorByIdConvenio: (req, res) => {
+        var query = "select * from Acreedor WHERE delet IS NULL AND idConvenio = " + req.params.idConvenio;
+        cmdSQL(query, res);
+    },
     //Consulta solo de la tabla de acreedores
     getListAcreedor: (req, res) => {
         var query = "SELECT * FROM Acreedor WHERE delet IS NULL";

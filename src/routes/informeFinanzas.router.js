@@ -1,13 +1,14 @@
 const informeFinanzasRouter = require('express').Router();
 
-const { getInformeFinanzas, getInformeFinanzasArchivadas, addInformeFinanzas, updateInformeFinanzas,
+const { getInformeFinanzas, getInformesFinanzas, getInformeFinanzasArchivadas, addInformeFinanzas, updateInformeFinanzas,
     updateInformeFinanzasArchivar, deleteInformeFinanzas } = require('../controllers/informeFinanzas.controller');
 
 informeFinanzasRouter.route('/')
-    .get(getInformeFinanzas)
+    .get(getInformesFinanzas)
     .post(addInformeFinanzas);
 
 informeFinanzasRouter.route('/:id')
+    .get(getInformeFinanzas)
     .put(updateInformeFinanzas)
     .delete(deleteInformeFinanzas);
 

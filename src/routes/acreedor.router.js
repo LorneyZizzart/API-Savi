@@ -1,6 +1,6 @@
 const acreedorRouter = require('express').Router();
 
-const { getListAcreedor, getAcreedor, getAcreedorForCod, addAcreedor, 
+const {getAcreedorByIdConvenio,  getListAcreedor, getAcreedor, getAcreedorForCod, addAcreedor, 
     updateAcreedor, 
     updateAcreedorSaldo, updateDevolverSaldo, deleteAcreedor} = require('../controllers/acreedor.controller');
 
@@ -20,6 +20,9 @@ acreedorRouter.route('/lista/')
 
 acreedorRouter.route('/buscarEstudiante/:codEstudiante')
     .get(getAcreedorForCod);
+
+acreedorRouter.route('/buscarConvenio/:idConvenio')
+    .get(getAcreedorByIdConvenio);
 
 acreedorRouter.route('/acreditacion/:id')
     .put(updateDevolverSaldo);

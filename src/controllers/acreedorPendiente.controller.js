@@ -34,8 +34,8 @@ function dateNow(){
         return fechaRegistro = yyyy+'/'+mm+'/'+dd+' '+hh+':'+min+':'+ss+'.000';
 }
 
-module.exports = {
-    getAcreedorPendientes: (req, res) => {
+module.exports = {    
+    getAcreedoresPendientes: (req, res) => {
         var query = "SELECT * FROM AcreedorPendiente";
         cmdSQL(query, res);
     },

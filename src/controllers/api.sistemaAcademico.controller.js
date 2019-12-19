@@ -39,5 +39,15 @@ module.exports = {
                     "WHERE nt.idMateria = ma.idMateria " +
                     "AND nt.idEstudiante = " + req.params.idEstudiante;
         cmdSQL(query, res);
+    },
+    // GESTIONAR HORARIO
+    getHorario: (req, res) => {
+        //se utliza para consumir en el sabi
+        var query = "SELECT ha.idHora, ha.nombre as periodo, di.idDia, di.nombre as dia, ho.idEstudiante " +
+                    "FROM Hora ha, Horario ho, Dia di " +
+                    "WHERE ha.idHora = ho.idHora " +
+                    "AND ho.idDia = di.idDia " +
+                    "AND ho.idEstudiante = " + req.params.idEstudiante;
+        cmdSQL(query, res);
     }
 };

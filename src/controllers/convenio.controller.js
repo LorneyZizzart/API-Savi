@@ -48,7 +48,15 @@ module.exports = {
         cmdSQL(query, res);
     },
     getConvenio: (req, res) => {
-        var query = 'SELECT * FROM Convenio WHERE idConvenio = ' + req.params.id;
+        var query = "SELECT co.idConvenio, pe.codEstudiante, pe.idPersona, pe.idCarrera, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
+                    "de.idDepartamento, de.nombre as departamento, " +
+                    "be.idBeca, be.nombre as beca, " +
+                    "co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio " +
+                    "FROM Convenio co, Persona pe, Departamento de, Beca be " +
+                    "WHERE co.idPersona = pe.idPersona " +
+                    "AND co.idDepartamento = de.idDepartamento " +
+                    "AND co.idBeca = be.idBeca " + 
+                    "AND co.delet IS NULL AND idConvenio = " + req.params.id;
         cmdSQL(query, res);
     },
     addConvenio: (req, res) => {

@@ -43,50 +43,61 @@ function dateNow(){
 }
 
 function descuentoCreditos(req, res){
+
     var queryState = "UPDATE Acreedor SET " +
                 "estado = " + req.body.estadoAcreedor + ", " +
                 "edit = '" + dateNow() + "' " +
                 "WHERE idAcreedor = " + req.body.idAcreedor;
-
+                console.log("query: "+queryState);
     requestSQL(queryState);
-
     var query = "INSERT INTO Acreedor VALUES( " +
                 req.body.idInformeEstudiante + ", " +
                 req.body.idConvenio + ", " +
                 req.body.idUsuario + ", '" +
                 dateNow() + "', '" + 
                 req.body.montoBs + "', 1, null, null, null)";
+
     cmdSQL(query, res);
 }
 
-module.exports = {
+module.exports = {    
+    getAcreedorById : (req, res) => {
+        var query = "SELECT idAcreedor, idInformeEstudiante, idConvenio, idUsuario, fechaAsignado, montoBs, estado, archivar, edit  " +
+                    "FROM Acreedor " +
+                    "WHERE delet IS NULL " +
+                    "AND idAcreedor = " + req.params.id;
+        cmdSQL(query, res);
+    },
+    //se utiliza acreditar en el modulo de descuentos
     getAcreedorByIdConvenio: (req, res) => {
-        var query = "select * from Acreedor WHERE delet IS NULL AND idConvenio = " + req.params.idConvenio;
+        var query = "SELECT idAcreedor, idInformeEstudiante, idConvenio, idUsuario, fechaAsignado, montoBs, estado, archivar, edit  " +
+                    "FROM Acreedor " +
+                    "WHERE delet IS NULL " +
+                    "AND estado = 1 " +
+                    "AND idConvenio = " + req.params.idConvenio;
         cmdSQL(query, res);
     },
     //Consulta solo de la tabla de acreedores
     getListAcreedor: (req, res) => {
-        var query = "SELECT * FROM Acreedor WHERE delet IS NULL";
+        var query = "SELECT idAcreedor, idInformeEstudiante, idConvenio, idUsuario, fechaAsignado, montoBs, estado, archivar, edit " +
+                    "FROM Acreedor " +
+                    "WHERE delet IS NULL";
 
         cmdSQL(query, res);
 
     },
     //Informes aprobados en finanzas [posibles errores probar]
     getAcreedor: (req, res) =>{
-        var query = "SELECT pe.codEstudiante, pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, ca.idCarrera, ca.nombre as carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " + 
+        var query = "SELECT pe.codEstudiante, pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
                     "de.idDepartamento, de.nombre as departamento, " +
-                    "be.idBeca, be.nombre as beca, " +
                     "co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio, " +
-                    "ac.idAcreedor, ac.idConvenio, ac.idInformeEstudiante, ac.idUsuario, ac.fechaAsignado, ac.montoBs, ac.estado " +
-                    "FROM Acreedor ac, Convenio co, Beca be, Departamento de, Persona pe, Carrera ca " +
+                    "ac.idAcreedor, ac.idConvenio, ac.idInformeEstudiante, ac.idUsuario, ac.fechaAsignado, ac.montoBs, ac.estado  " +
+                    "FROM Acreedor ac, Convenio co,  Departamento de, Persona pe " +
                     "WHERE ac.idConvenio = co.idConvenio " +
-                    "AND pe.idCarrera = ca.idCarrera " +
                     "AND co.idPersona = pe.idPersona " +
-                    "AND co.idBeca = be.idBeca " +
                     "AND co.idDepartamento = de.idDepartamento " +
-                    "AND co.delet IS NULL " +
                     "AND ac.delet IS NULL " +
-                    "AND ac.estado = 1 " +
+                    "AND ac.estado = 1 " + 
                     "ORDER BY ac.fechaAsignado ASC";
 
         cmdSQL(query, res);

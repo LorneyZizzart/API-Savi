@@ -1,6 +1,6 @@
 const descuentoRouter = require('express').Router();
 
-const { getDescuentos, addDescuento, updateDescuento, deleteDescuento
+const { getDescuentos, getDescuentosByConvenio , addDescuento, updateDescuento, deleteDescuento
         } = require('../controllers/descuento.controller');
 
 descuentoRouter.route('/')
@@ -10,5 +10,8 @@ descuentoRouter.route('/')
 descuentoRouter.route('/:id')
     .put(updateDescuento)
     .delete(deleteDescuento);
+
+descuentoRouter.route('/convenio/:idConvenio')
+    .get(getDescuentosByConvenio);
 
 module.exports = descuentoRouter;

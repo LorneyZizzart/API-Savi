@@ -37,6 +37,11 @@ function dateNow(){
 
 
 module.exports = {
+    getDepartamentoById: (req, res) =>{
+        var query = "SELECT idDepartamento, nombre as nombreDepartamento, fechaRegistro, estado as estadoDepartamento FROM Departamento WHERE estado = 1 AND delet IS NULL "+
+                    "AND idDepartamento = " +  req.params.idDepartamento;
+        cmdSQL(query, res);
+    },
     //se utiliza para realizar el convenio
     getAllDepartamentos: (req, res) =>{
         var query = "SELECT idDepartamento, nombre as nombreDepartamento, fechaRegistro, estado as estadoDepartamento FROM Departamento WHERE estado = 1 AND delet IS NULL ORDER BY nombre ASC";

@@ -1,6 +1,6 @@
 const convenioRouter = require('express').Router();
 
-const { getConvenios, getConvenio, addConvenio, updateConvenio, updateEstadoConvenio, deleteConvenio } = require('../controllers/convenio.controller');
+const { getConvenios, getConvenio, getConvenioByUsuario, addConvenio, updateConvenio, updateEstadoConvenio, deleteConvenio } = require('../controllers/convenio.controller');
 
 convenioRouter.route('/')
     .get(getConvenios)
@@ -13,5 +13,8 @@ convenioRouter.route('/:id')
 
 convenioRouter.route('/editEstado/:id')
     .put(updateEstadoConvenio);
+
+convenioRouter.route('/convenioByUsuario/:idUsuario')
+    .get(getConvenioByUsuario);
 
 module.exports = convenioRouter;

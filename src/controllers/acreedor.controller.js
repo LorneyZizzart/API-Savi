@@ -60,7 +60,7 @@ function descuentoCreditos(req, res){
     cmdSQL(query, res);
 }
 
-module.exports = {    
+module.exports = {   
     getAcreedorById : (req, res) => {
         var query = "SELECT idAcreedor, idInformeEstudiante, idConvenio, idUsuario, fechaAsignado, montoBs, estado, archivar, edit  " +
                     "FROM Acreedor " +
@@ -87,7 +87,7 @@ module.exports = {
 
     },
     //Informes aprobados en finanzas [posibles errores probar]
-    getAcreedor: (req, res) =>{
+    getAcreedores: (req, res) =>{
         var query = "SELECT pe.codEstudiante, pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
                     "de.idDepartamento, de.nombre as departamento, " +
                     "co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado as estadoConvenio, " +

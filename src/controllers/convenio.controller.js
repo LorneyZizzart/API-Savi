@@ -59,6 +59,18 @@ module.exports = {
                     "AND co.delet IS NULL AND idConvenio = " + req.params.id;
         cmdSQL(query, res);
     },
+    getConvenioByUsuario : (req, res ) => {
+        var query = "SELECT co.idConvenio, co.idDepartamento, co.idPersona, co.idBeca, co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado, co.register, co.edit " +
+                    "FROM Convenio co, Persona pe, Usuario us " +
+                    "WHERE us.idPersona = pe.idPersona "+ 
+                    "AND pe.idPersona = co.idPersona " +
+                    "AND us.delet IS NULL " + 
+                    "and pe.delet  IS NULL " + 
+                    "AND co.delet IS NULL " +
+                    "AND us.idUsuario = " + req.params.idUsuario;
+                    console.log(query);
+        cmdSQL(query, res);
+    },
     addConvenio: (req, res) => {
 
         var query = "INSERT INTO Convenio VALUES(" +

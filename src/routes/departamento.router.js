@@ -1,6 +1,6 @@
 const departamentoRouter = require('express').Router();
 
-const { getAllDepartamentos, getDepartamentos, getDepartamento, getDepartamentoName, getDepartamentosUser, addDepartamento, updateDepartamento, updateEstadoDepartamento, deleteDepartamento } = require('../controllers/departamento.controller');
+const {getDepartamentoById, getAllDepartamentos, getDepartamentos, getDepartamento, getDepartamentoName, getDepartamentosUser, addDepartamento, updateDepartamento, updateEstadoDepartamento, deleteDepartamento } = require('../controllers/departamento.controller');
 
 departamentoRouter.route('/')
     .get(getDepartamentos)
@@ -23,4 +23,6 @@ departamentoRouter.route('/editEstado/:id')
 departamentoRouter.route('/depsUser/:idRol/:idUser')
     .get(getDepartamentosUser);
 
+departamentoRouter.route('/getDepartamentoById/:idDepartamento')
+    .get(getDepartamentoById);
 module.exports = departamentoRouter;

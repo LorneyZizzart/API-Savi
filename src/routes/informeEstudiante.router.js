@@ -1,4 +1,5 @@
 const informeEstudianteRouter = require('express').Router();
+const chekAuth = require('../middleware/chek-auth');
 
 const { getInformeEstudianteAll, getInformeEstudiante, 
     getInformeEstudianteArchivados, getAcreedorHistorial, getInformeEstudianteDelete,
@@ -7,27 +8,27 @@ const { getInformeEstudianteAll, getInformeEstudiante,
     deleteInformeEstudiante } = require('../controllers/informeEstudiante.controller');
 
 informeEstudianteRouter.route('/')
-    .get(getInformeEstudianteAll)
-    .post(addInformeEstudiante);
+    .get(chekAuth, getInformeEstudianteAll)
+    .post(chekAuth, addInformeEstudiante);
 
 informeEstudianteRouter.route('/aprobarFinanzas/:id')
-    .put(updateAprobarFinanzas);
+    .put(chekAuth, updateAprobarFinanzas);
 
 informeEstudianteRouter.route('/archivar/:id')
-    .get(getInformeEstudianteArchivados)
-    .put(updateInformeArchivar);
+    .get(chekAuth, getInformeEstudianteArchivados)
+    .put(chekAuth, updateInformeArchivar);
 
 informeEstudianteRouter.route('/:idDepto')
-    .get(getInformeEstudiante)
-    .delete(bajaInformeEstudiante);
+    .get(chekAuth, getInformeEstudiante)
+    .delete(chekAuth, bajaInformeEstudiante);
 
 informeEstudianteRouter.route('/informesEliminados/:id')
-    .get(getInformeEstudianteDelete);
+    .get(chekAuth, getInformeEstudianteDelete);
 
 informeEstudianteRouter.route('/acreedorHistorial/:idConvenio')
-    .get(getAcreedorHistorial);
+    .get(chekAuth, getAcreedorHistorial);
 
 informeEstudianteRouter.route('/:fecha/:idRH')
-    .delete(deleteInformeEstudiante);
+    .delete(chekAuth, deleteInformeEstudiante);
 
 module.exports = informeEstudianteRouter;

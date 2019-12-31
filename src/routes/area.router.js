@@ -1,4 +1,5 @@
 const areaRouter = require('express').Router();
+const chekAuth = require('../middleware/chek-auth');
 
 const { getAreas, getArea, getAreasDepartamento, addArea, updateArea, 
         updateEstadoArea, deleteArea, getAsignacionArea, getAreByConvenio, addAsigancionArea,
@@ -6,32 +7,32 @@ const { getAreas, getArea, getAreasDepartamento, addArea, updateArea,
         } = require('../controllers/area.controller');
 
 areaRouter.route('/')
-    .get(getAreas)
-    .post(addArea);
+    .get(chekAuth, getAreas)
+    .post(chekAuth, addArea);
 
 areaRouter.route('/:id')
-    .get(getArea)
-    .put(updateArea)
-    .delete(deleteArea);
+    .get(chekAuth, getArea)
+    .put(chekAuth, updateArea)
+    .delete(chekAuth, deleteArea);
 
 areaRouter.route('/dept/:idDepartamento')
-    .get(getAreasDepartamento);
+    .get(chekAuth, getAreasDepartamento);
 
 areaRouter.route('/estado/:idArea')
-    .put(updateEstadoArea);
+    .put(chekAuth, updateEstadoArea);
 
 areaRouter.route('/asignacionArea/crud')
-    .post(addAsigancionArea);
+    .post(chekAuth, addAsigancionArea);
 
 areaRouter.route('/asignacionArea/byConvenio/:idConvenio')
-    .get(getAreByConvenio);
+    .get(chekAuth, getAreByConvenio);
 
 areaRouter.route('/asignacionArea/crud/:idArea')
-    .get(getAsignacionArea)
-    .put(updateAsignacionArea) /*aqui se envia el id de asigancion de area*/
-    .delete(deleteAsignacionArea); /*aqui se envia el id de asigancion para dar de baja*/
+    .get(chekAuth, getAsignacionArea)
+    .put(chekAuth, updateAsignacionArea) /*aqui se envia el id de asigancion de area*/
+    .delete(chekAuth, deleteAsignacionArea); /*aqui se envia el id de asigancion para dar de baja*/
 
 areaRouter.route('/cambiarArea/:idAsignacion')
-    .put(updateCambiarArea);
+    .put(chekAuth, updateCambiarArea);
 
 module.exports = areaRouter;

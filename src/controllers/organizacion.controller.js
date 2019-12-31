@@ -1,47 +1,5 @@
-var sql = require('mssql');
-const config = require('../db/config.db');
-
-async function cmdSQL(query, res) {
-
-    new sql.ConnectionPool(config).connect().then(pool => {
-        return pool.request().query(query)
-    }).then(result => {
-        let rows = result.recordset
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.status(200).json(rows);
-        sql.close();
-    }).catch(err => {
-        res.status(500).send({ message: "${err}"})
-        sql.close();
-    })
-}
-
-//un auxiliar cmd 
-async function requestSQL(query){
-    sql.connect(config).then(() => {
-        sql.query(query);
-        return true;
-    }).then(result => {
-    })
-}
-
-function dateNow(){
-    var fechaRegistro = new Date();
-        var dd = fechaRegistro.getDate();
-        var mm = fechaRegistro.getMonth() + 1;
-        var yyyy = fechaRegistro.getFullYear();
-
-        if (dd < 10) {
-            dd = '0' + dd;
-          }
-          
-          if (mm < 10) {
-            mm = '0' + mm;
-          }
-
-          return fechaRegistro = yyyy+'/'+mm+'/'+dd;
-}
-
+const {querySQL, requestSQL} = require("../db/cmdSQL");
+const {dateNow} = require('../class/date');
 
 module.exports = {
     getOrganizacion: (req, res) => {
@@ -51,13 +9,13 @@ module.exports = {
                     "WHERE estado = 1 AND idDepartamento = " + req.params.id;
         //var query = "SELECT de.idDepartamento, de.nombre FROM Departamento de , Organizacion org " +
           //              "WHERE NOT EXISTS (SELECT * FROM Departamento de , Organizacion org WHERE de.idDepartamento = org.idDepartamento)";
-         cmdSQL(query, res);
+          querySQL(query, res);
     },
     getOrganizaciones: (req, res) => {
         var query = "SELECT pe.idPersona, us.idUsuario, us.idRol, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, " + 
                     "pe.estado as estadoPersona, us.estado as estadoUsuario, us.usuario, us.password " +
 		            "FROM Persona pe, Usuario us WHERE pe.idPersona = us.idPersona AND us.idRol = 4"
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     getAdministracion: (req, res) => {
 
@@ -65,7 +23,7 @@ module.exports = {
                     "pe.estado as estadoPersona, us.estado as estadoUsuario, us.usuario, us.password " +
                     "FROM Persona pe, Usuario us WHERE pe.idPersona = us.idPersona AND us.estado = 1 AND us.delet IS NULL AND us.idRol = " + req.params.idRol;
                  
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     getEncargodosDepartamento: (req, res) => {
         //para el modulo de departamento me lista el historial de encargados del departamento
@@ -75,7 +33,7 @@ module.exports = {
                     "WHERE pe.idPersona = org.idPersona " +
                     "AND org.delet IS NULL " +
                     "AND org.idDepartamento = " + req.params.idDepartamento;
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     addOrganizacion: (req, res) => {
 
@@ -87,19 +45,19 @@ module.exports = {
             var query = "INSERT INTO Organizacion VALUES (" +
             req.body.idDepartamento + ", " +
             req.body.idPersona + ", '" +
-            dateNow() + "', 1, '" +
-            dateNow() + "', null)";
+            dateNow + "', 1, '" +
+            dateNow + "', null)";
 
-            cmdSQL(query, res);
+            querySQL(query, res);
         }        
     },
     updateOrganizacion: (req, res) => {},
     deleteOrganizacion: (req, res) => {
 
         var query = "UPDATE Organizacion SET " +
-            "delet = '" + dateNow() + "' "+
+            "delet = '" + dateNow + "' "+
             "WHERE idOrganizacion = " + req.params.id;
 
-        cmdSQL(query, res);
+            querySQL(query, res);
     }
 };

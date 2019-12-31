@@ -1,38 +1,5 @@
-var sql = require('mssql');
-const config = require('../db/config.db');
-
-async function cmdSQL(query, res) {
-
-    new sql.ConnectionPool(config).connect().then(pool => {
-        return pool.request().query(query)
-    }).then(result => {
-        let rows = result.recordset
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.status(200).json(rows);
-        sql.close();
-    }).catch(err => {
-        res.status(500).send({ message: "${err}"})
-        sql.close();
-    })
-}
-
-function dateNow(){
-    var fechaRegistro = new Date();
-        var dd = fechaRegistro.getDate();
-        var mm = fechaRegistro.getMonth() + 1;
-        var yyyy = fechaRegistro.getFullYear();
-        var hh = fechaRegistro.getHours();
-        var min = fechaRegistro.getMinutes();
-        var ss = fechaRegistro.getSeconds();
-
-        if (dd < 10) { dd = '0' + dd; }
-        if (mm < 10) { mm = '0' + mm; }
-        if (hh < 10) { hh = '0' + hh;   }
-        if (min < 10) { min = '0' + min;   }
-        if (ss < 10) { ss = '0' + ss;   }
-
-        return fechaRegistro = yyyy+'/'+mm+'/'+dd+' '+hh+':'+min+':'+ss+'.000';
-}
+const {querySQL} = require("../db/cmdSQL");
+const {dateNow} = require('../class/date');
 
 module.exports = {
     getDescuentos: (req, res) => {
@@ -51,7 +18,7 @@ module.exports = {
                     "AND ac.delet IS NULL " +
                     "AND descu.delet IS NULL " +
                     "ORDER BY ac.fechaAsignado ASC";
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     getDescuentosByConvenio : (req, res) => {
         var query = "SELECT ac .idAcreedor, ac.idInformeEstudiante, ac.idConvenio, ac.idUsuario, ac.fechaAsignado, ac.montoBs, ac.estado, " +
@@ -61,7 +28,7 @@ module.exports = {
                     "AND idConvenio = " + req.params.idConvenio + " "
                     "AND ac.delet IS NULL " +
                     "AND de.delet IS NULL";
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     addDescuento: (req, res) => {
         var observacion = null;
@@ -73,11 +40,11 @@ module.exports = {
         var query = "INSERT INTO Descuento VALUES( " +
             req.body.idAcreedor + ", " +
             req.body.idUsuario + ", '" +
-            dateNow() + "', '" +
+            dateNow + "', '" +
             req.body.saldoInicialDescuento + "', '" +
             req.body.montoDescuento + "', " + observacion + ", null, null, 1)";
 
-        cmdSQL(query, res);
+            querySQL(query, res);
     },
     updateDescuento: (req, res) => {
 
@@ -94,16 +61,15 @@ module.exports = {
             "montoBs = '" + req.body.montoDescuento + "', " +
             "observacion = " + observacion + ", " +
             "estado = " + req.body.estadoDescuento + ", " +
-            "edit = '" + dateNow() + "' " +
+            "edit = '" + dateNow + "' " +
             "WHERE idDescuento = " + req.params.id;
-        console.log(query);
-        cmdSQL(query, res);
+        querySQL(query, res);
     },
     deleteDescuento: (req, res) => {
         var query = "UPDATE Descuento SET " +
-            "delet = '" + dateNow() + "' " +
+            "delet = '" + dateNow + "' " +
             "WHERE idDescuento = " + req.params.id;
 
-        cmdSQL(query, res);
+            querySQL(query, res);
     }
 };

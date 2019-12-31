@@ -1,31 +1,32 @@
 const acreedorRouter = require('express').Router();
+const chekAuth = require('../middleware/chek-auth');
 
 const {getAcreedorById, getAcreedorByIdConvenio,  getListAcreedor, getAcreedores, getAcreedorForCod, addAcreedor, 
     updateAcreedor, 
     updateAcreedorSaldo, updateDevolverSaldo, deleteAcreedor} = require('../controllers/acreedor.controller');
 
 acreedorRouter.route('/')
-    .get(getAcreedores)
-    .post(addAcreedor);
+    .get(chekAuth, getAcreedores)
+    .post(chekAuth, addAcreedor);
 
 acreedorRouter.route('/descuentos/')
-    .put(updateAcreedor)
+    .put(chekAuth, updateAcreedor)
 
 acreedorRouter.route('/:id')
-    .get(getAcreedorById)
-    .put(updateAcreedorSaldo)
-    .delete(deleteAcreedor);
+    .get(chekAuth, getAcreedorById)
+    .put(chekAuth, updateAcreedorSaldo)
+    .delete(chekAuth, deleteAcreedor);
 
 acreedorRouter.route('/lista/')
-    .get(getListAcreedor);
+    .get(chekAuth, getListAcreedor);
 
 acreedorRouter.route('/buscarEstudiante/:codEstudiante')
-    .get(getAcreedorForCod);
+    .get(chekAuth, getAcreedorForCod);
 
 acreedorRouter.route('/buscarConvenio/:idConvenio')
-    .get(getAcreedorByIdConvenio);
+    .get(chekAuth, getAcreedorByIdConvenio);
 
 acreedorRouter.route('/acreditacion/:id')
-    .put(updateDevolverSaldo);
+    .put(chekAuth, updateDevolverSaldo);
 
 module.exports = acreedorRouter;

@@ -1,19 +1,20 @@
 const organizacionRouter = require('express').Router();
+const chekAuth = require('../middleware/chek-auth');
 
 const { getOrganizaciones, getOrganizacion, getAdministracion, getEncargodosDepartamento, addOrganizacion, deleteOrganizacion } = require('../controllers/organizacion.controller');
 
 organizacionRouter.route('/')
-    .get(getOrganizaciones)
-    .post(addOrganizacion);
+    .get(chekAuth, getOrganizaciones)
+    .post(chekAuth, addOrganizacion);
 
 organizacionRouter.route('/:id')
-    .get(getOrganizacion)
-    .delete(deleteOrganizacion);
+    .get(chekAuth, getOrganizacion)
+    .delete(chekAuth, deleteOrganizacion);
 
 organizacionRouter.route('/encargadosDepartamento/:idDepartamento')
-    .get(getEncargodosDepartamento)
+    .get(chekAuth, getEncargodosDepartamento)
 
 organizacionRouter.route('/administracion/:idRol')
-    .get(getAdministracion)
+    .get(chekAuth, getAdministracion)
 
 module.exports = organizacionRouter;

@@ -1,23 +1,24 @@
 const userRouter = require('express').Router();
+const chekAuth = require('../middleware/chek-auth');
 
 const { getUsers, getUser, getVerificarUser, searchUser, addUser, updateUser, deleteUser } = require('../controllers/user.controller');
 
 userRouter.route('/')
-    .post(addUser);
+    .post(chekAuth, addUser);
 
 userRouter.route('/search/users/:idRol')
-    .get(getUsers);
+    .get(chekAuth, getUsers);
 
 userRouter.route('/:id')
-    .get(getUser)
-    .put(updateUser)
-    .delete(deleteUser);
+    .get(chekAuth, getUser)
+    .put(chekAuth, updateUser)
+    .delete(chekAuth, deleteUser);
 
 userRouter.route('/:id/:idPersona')
-    .put(updateUser)
+    .put(chekAuth, updateUser)
 
 userRouter.route('/search/name/:usuario')
-    .get(searchUser)
+    .get(chekAuth, searchUser)
 
 userRouter.route('/verificarUser/')
     .post(getVerificarUser);

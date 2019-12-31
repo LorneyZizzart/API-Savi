@@ -1,39 +1,5 @@
-var sql = require('mssql');
-const config = require('../db/config.db');
-
-async function cmdSQL(query, res) {
-    new sql.ConnectionPool(config).connect().then(pool => {
-        return pool.request().query(query)
-    }).then(result => {
-        let rows = result.recordset
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.status(200).json(rows);
-        sql.close();
-    }).catch(err => {
-        res.status(500).send({ message: "${err}"})
-        sql.close();
-    })
-
-}
-
-function dateNow(){
-    var fechaRegistro = new Date();
-        var dd = fechaRegistro.getDate();
-        var mm = fechaRegistro.getMonth() + 1;
-        var yyyy = fechaRegistro.getFullYear();
-        var hh = fechaRegistro.getHours();
-        var min = fechaRegistro.getMinutes();
-        var ss = fechaRegistro.getSeconds();
-
-        if (dd < 10) { dd = '0' + dd; }
-        if (mm < 10) { mm = '0' + mm; }
-        if (hh < 10) { hh = '0' + hh;   }
-        if (min < 10) { min = '0' + min;   }
-        if (ss < 10) { ss = '0' + ss;   }
-
-        return fechaRegistro = yyyy+'/'+mm+'/'+dd+' '+hh+':'+min+':'+ss+'.000';
-}
-
+const {querySQL, authToken} = require("../db/cmdSQL");
+const {dateNow} = require('../class/date');
 
 module.exports = {
     //VER LOS USUARIOS PARA FINANZAS
@@ -59,21 +25,21 @@ module.exports = {
                     "ORDER BY pe.primerApellido ASC ";
         }
         
-        cmdSQL(query, res);
+        querySQL(query, res);
     },//obtener datos del usuario para el navbar
     getUser: (req, res) => {
+
         var query = "SELECT pe.idPersona, us.idUsuario, us.idRol, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, " +
                     "rl.nombre as rol, us.estado as estadoUsuario " +
                     "FROM Usuario us, Rol rl, Persona pe " +
                     "WHERE pe.idPersona = us.idPersona " +
                     "AND us.idRol = rl.idRol " +
                     "AND idUsuario = " + req.params.id;
-        cmdSQL(query, res);
+        querySQL(query, res);
     },//para el login 
     getVerificarUser: (req, res) => {
-        console.log("hola");
-        var query = "SELECT * FROM Usuario WHERE usuario = '" + req.body.usuario + "' AND password = '" + req.body.password + "' AND delet IS NULL";
-        cmdSQL(query, res);
+        var query = "SELECT idUsuario, idPersona, idRol, usuario, password, estado FROM Usuario WHERE usuario = '" + req.body.usuario + "' AND password = '" + req.body.password + "' AND delet IS NULL";
+        authToken(query, res);
     },//para verificar si el nombre de usuario existe
     searchUser: (req, res) => {
         var query = "SELECT * FROM Usuario WHERE usuario = '" + req.params.usuario + "' AND delet IS NULL";
@@ -86,9 +52,9 @@ module.exports = {
             req.body.idRol + ", '" +
             req.body.usuario + "', '" +
             req.body.password + "', 1, '" +
-            dateNow() + "', null, null)";
+            dateNow + "', null, null)";
 
-        cmdSQL(query, res);
+        querySQL(query, res);
     },
     updateUser: (req, res) => {   
         var query = "UPDATE Usuario SET " +
@@ -96,25 +62,25 @@ module.exports = {
             "usuario = '" + req.body.usuario + "', " +
             "password = '" + req.body.password + "', " +
             "estado = " + req.body.estado + ", " +
-            "edit = '" + dateNow() + "' "+
+            "edit = '" + dateNow + "' "+
             "WHERE idUsuario = " + req.params.id + "AND idPersona = " + req.params.idPersona;
 
-        cmdSQL(query, res);
+        querySQL(query, res);
     },
     updateEstadoUser: (req, res) => {
         var query = "UPDATE Usuario SET " +
             "estado = " + req.body.estado + ", " +
-            "edit = '" + dateNow() + "' "+
+            "edit = '" + dateNow+ "' "+
             "WHERE idUsuario = " + req.params.id;
 
-        cmdSQL(query, res);
+        querySQL(query, res);
     },
     deleteUser: (req, res) => {
 
         var query = "UPDATE Usuario SET " +
-                    "delet = '" + dateNow() + "' "+
+                    "delet = '" + dateNow + "' "+
                     "WHERE idUsuario = " + req.params.id;
 
-        cmdSQL(query, res);
+        querySQL(query, res);
     }
 };

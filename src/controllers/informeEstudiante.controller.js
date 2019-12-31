@@ -1,38 +1,5 @@
-var sql = require('mssql');
-const config = require('../db/config.db');
-
-async function cmdSQL(query, res) {
-
-    new sql.ConnectionPool(config).connect().then(pool => {
-        return pool.request().query(query)
-    }).then(result => {
-        let rows = result.recordset
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.status(200).json(rows);
-        sql.close();
-    }).catch(err => {
-        res.status(500).send({ message: "${err}"})
-        sql.close();
-    })
-}
-
-function dateNow(){
-    var fechaRegistro = new Date();
-        var dd = fechaRegistro.getDate();
-        var mm = fechaRegistro.getMonth() + 1;
-        var yyyy = fechaRegistro.getFullYear();
-        var hh = fechaRegistro.getHours();
-        var min = fechaRegistro.getMinutes();
-        var ss = fechaRegistro.getSeconds();
-
-        if (dd < 10) { dd = '0' + dd; }
-        if (mm < 10) { mm = '0' + mm; }
-        if (hh < 10) { hh = '0' + hh;   }
-        if (min < 10) { min = '0' + min;   }
-        if (ss < 10) { ss = '0' + ss;   }
-
-        return fechaRegistro = yyyy+'/'+mm+'/'+dd+' '+hh+':'+min+':'+ss+'.000';
-}
+const {querySQL} = require("../db/cmdSQL");
+const {dateNow} = require('../class/date');
 
 module.exports = {    
     //Generar informe x departamento
@@ -55,7 +22,7 @@ module.exports = {
                     "AND de.idDepartamento = " + req.params.idDepto + " " +
                     "ORDER BY ie.fecha ASC";
 
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     getInformeEstudianteArchivados: (req, res) =>{
         var query = "SELECT ie.idInformeEstudiante, co.idConvenio, pe.codEstudiante, pe.idPersona, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, ca.idCarrera, ca.nombre as carrera, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
@@ -76,7 +43,7 @@ module.exports = {
                     "AND de.idDepartamento =" + req.params.id + " " +
                     "ORDER BY ie.fecha ASC";
 
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },//Generar informe para finanzas de todos los departamentos
     getInformeEstudianteAll: (req, res) =>{
 
@@ -95,7 +62,7 @@ module.exports = {
                     "AND ie.revisadoFinanzas IS NULL " +
                     "ORDER BY ie.fecha ASC";
 
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     //lista los informes estudiante por numero de convenio
     getAcreedorHistorial: (req, res) =>{
@@ -108,7 +75,7 @@ module.exports = {
                     "AND inE.delet IS NULL " +
                     "AND reH.aprobado = 1";
                     
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     getInformeEstudianteDelete: (req, res) =>{
 
@@ -126,7 +93,7 @@ module.exports = {
                     "AND de.idDepartamento = " + req.params.id
                     "ORDER BY ie.fecha ASC";
                     
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     //para generar un informe del jefe
     addInformeEstudiante: (req, res) => {
@@ -136,23 +103,23 @@ module.exports = {
             req.body.fecha + "', '" +
             req.body.totalHoras + "', '" +
             req.body.totalSaldo + "', '" + 
-            dateNow() + "', 0, null, null, null)";
+            dateNow + "', 0, null, null, null)";
 
-        cmdSQL(query, res);
+            querySQL(query, res);
     },
     updateAprobarFinanzas: (req, res) => {
         var query = "UPDATE InformeEstudiante SET " +
             "aprobadoFinanzas = " + req.body.aprobadoFinanzas + ", " +
-            "revisadoFinanzas = '" + dateNow() + "' " +
+            "revisadoFinanzas = '" + dateNow + "' " +
             "WHERE idInformeEstudiante = " + req.params.id;
 
-        cmdSQL(query, res);
+            querySQL(query, res);
     },
     updateInformeArchivar: (req, res) => {
         var query;
         if(req.body.archivar == "SI"){
             query = "UPDATE InformeEstudiante SET " +
-            "archivar = '" + dateNow()+ "' " +
+            "archivar = '" + dateNow+ "' " +
             "WHERE idInformeEstudiante = " + req.params.id;
         }else if(req.body.archivar == "NO"){
             query = "UPDATE InformeEstudiante SET " +
@@ -160,24 +127,24 @@ module.exports = {
             "WHERE idInformeEstudiante = " + req.params.id;
         }       
 
-        cmdSQL(query, res);
+        querySQL(query, res);
     },
     // para eliminar el informe del jefe de departamento
     bajaInformeEstudiante: (req, res) => {
 
         var query = "UPDATE InformeEstudiante SET " +
-                    "delet = '" + dateNow() + "' " +
+                    "delet = '" + dateNow + "' " +
                     "WHERE idInformeEstudiante = " + req.params.idDepto; /* en si es el id del informe para eliminar el informe del jefe de departamento para el usuario jefe de departamento */
 
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     deleteInformeEstudiante: (req, res) => {
 
         var query = "UPDATE InformeEstudiante SET " +
-                    "delet = '" + dateNow() + "' " +
+                    "delet = '" + dateNow + "' " +
                     "WHERE fecha = '" + req.params.fecha + "' " +
                     "AND idRegistroHora = " + req.params.idRH;
 
-        cmdSQL(query, res);
+                    querySQL(query, res);
     }
 };

@@ -1,20 +1,21 @@
 const convenioRouter = require('express').Router();
+const chekAuth = require('../middleware/chek-auth');
 
 const { getConvenios, getConvenio, getConvenioByUsuario, addConvenio, updateConvenio, updateEstadoConvenio, deleteConvenio } = require('../controllers/convenio.controller');
 
 convenioRouter.route('/')
-    .get(getConvenios)
-    .post(addConvenio);
+    .get(chekAuth, getConvenios)
+    .post(chekAuth, addConvenio);
 
 convenioRouter.route('/:id')
-    .get(getConvenio)
-    .put(updateConvenio)
-    .delete(deleteConvenio);
+    .get(chekAuth, getConvenio)
+    .put(chekAuth, updateConvenio)
+    .delete(chekAuth, deleteConvenio);
 
 convenioRouter.route('/editEstado/:id')
-    .put(updateEstadoConvenio);
+    .put(chekAuth, updateEstadoConvenio);
 
 convenioRouter.route('/convenioByUsuario/:idUsuario')
-    .get(getConvenioByUsuario);
+    .get(chekAuth, getConvenioByUsuario);
 
 module.exports = convenioRouter;

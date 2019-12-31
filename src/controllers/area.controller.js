@@ -1,49 +1,16 @@
-var sql = require('mssql');
-const config = require('../db/config.db');
-
-async function cmdSQL(query, res) {
-
-    new sql.ConnectionPool(config).connect().then(pool => {
-        return pool.request().query(query)
-    }).then(result => {
-        let rows = result.recordset
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.status(200).json(rows);
-        sql.close();
-    }).catch(err => {
-        res.status(500).send({ message: "${err}"})
-        sql.close();
-    })
-}
-
-function dateNow(){
-    var fechaRegistro = new Date();
-        var dd = fechaRegistro.getDate();
-        var mm = fechaRegistro.getMonth() + 1;
-        var yyyy = fechaRegistro.getFullYear();
-        var hh = fechaRegistro.getHours();
-        var min = fechaRegistro.getMinutes();
-        var ss = fechaRegistro.getSeconds();
-
-        if (dd < 10) { dd = '0' + dd; }
-        if (mm < 10) { mm = '0' + mm; }
-        if (hh < 10) { hh = '0' + hh;   }
-        if (min < 10) { min = '0' + min;   }
-        if (ss < 10) { ss = '0' + ss;   }
-
-        return fechaRegistro = yyyy+'/'+mm+'/'+dd+' '+hh+':'+min+':'+ss+'.000';
-}
+const {querySQL} = require("../db/cmdSQL");
+const {dateNow} = require('../class/date')
 
 module.exports = {
     getAreas: (req, res) => {
         var query = "SELECT idArea, idDepartamento, nombre as nombreArea, fechaRegistro as fechaRegistroArea, estado as estadoArea FROM Area WHERE delet IS NULL ORDER BY nombre ASC";
-        cmdSQL(query, res);
+        querySQL(query, res);
     },
     getArea: (req, res) => {
         var query = "SELECT idArea, idDepartamento, nombre as nombreArea, fechaRegistro as fechaRegistroArea, estado as estadoArea " +
                     "FROM Area " +
                     "WHERE idArea = " + req.params.id;
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     getAreasDepartamento: (req, res) => {
         var query = "SELECT ar.idDepartamento, ar.idArea, de.nombre as nombreDepartamento, de.fechaRegistro as fechaRegistroDepartamento, de.estado as estadoDepartamento, ar.nombre as nombreArea, ar.fechaRegistro as fechaRegistroArea, ar.estado as estadoArea " +
@@ -52,40 +19,40 @@ module.exports = {
                     "AND ar.delet IS NULL AND de.delet IS NULL " +
                     "AND ar.idDepartamento = " + req.params.idDepartamento +
                     " ORDER BY ar.nombre ASC";
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     addArea: (req, res) => {
 
         var query = "INSERT INTO Area VALUES( " +
             req.body.idDepartamento + ", '" +
             req.body.nombreArea + "', '" +
-            dateNow() + "', 1, null, null)";
+            dateNow + "', 1, null, null)";
 
-        cmdSQL(query, res);
+            querySQL(query, res);
     },
     updateArea: (req, res) => {
 
         var query = "UPDATE Area SET " +
             "nombre = '" + req.body.nombreArea + "', " +
-            "edit = '" + dateNow() + "' " +
+            "edit = '" + dateNow + "' " +
             "WHERE idArea = " + req.params.id;
 
-        cmdSQL(query, res);
+            querySQL(query, res);
     },
     updateEstadoArea: (req, res) => {
         var query = "UPDATE Area SET " +
             "estado = " + req.body.estadoArea + ", " +
-            "edit = '" + dateNow() + "' " +
+            "edit = '" + dateNow + "' " +
             "WHERE idArea = " + req.params.idArea;
 
-        cmdSQL(query, res);
+            querySQL(query, res);
     },
     deleteArea: (req, res) => {
         var query = "UPDATE Area SET " +
-            "delet = '" + dateNow() + "' " +
+            "delet = '" + dateNow + "' " +
             "WHERE idArea = " + req.params.id;
 
-        cmdSQL(query, res);
+            querySQL(query, res);
     },
     //LISTAR LOS ESTUDIANTES X DEPARTAMENTO
     getAsignacionArea: (req, res) => {
@@ -102,7 +69,7 @@ module.exports = {
                     "AND aa.delet IS NULL " +
                     "ORDER BY pe.primerApellido ASC";
 
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     getAreByConvenio: (req, res) => {
         var query = "SELECT ar.idArea, ar.idDepartamento, ar.nombre as nombreArea, ar.estado as estadoArea " +
@@ -112,7 +79,7 @@ module.exports = {
                     "AND aa.delet IS NULL " +
                     "ORDER BY ar.nombre ASC";
 
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     addAsigancionArea: (req, res) => {
         var query = "INSERT INTO AsignacionArea VALUES( " +
@@ -125,24 +92,24 @@ module.exports = {
     updateAsignacionArea: (req, res) => {
         var query = "UPDATE AsignacionArea SET " +
         "estado = " + req.body.estadoAsignacion + ", " +
-        "edit = '" + dateNow() + "' " +
+        "edit = '" + dateNow + "' " +
         "WHERE idAsignacionArea = " + req.params.idArea;
 
-        cmdSQL(query, res);
+        querySQL(query, res);
     },
     updateCambiarArea: (req, res) => {
         var query = "UPDATE AsignacionArea SET " +
         "idArea = " + req.body.idArea + ", " +
-        "edit = '" + dateNow() + "' " +
+        "edit = '" + dateNow + "' " +
         "WHERE idAsignacionArea = " + req.params.idAsignacion;
 
-        cmdSQL(query, res);
+        querySQL(query, res);
     },
     deleteAsignacionArea: (req, res) => {
         var query = "UPDATE AsignacionArea SET " +
-            "delet = '" + dateNow() + "' " +
+            "delet = '" + dateNow + "' " +
             "WHERE idAsignacionArea = " + req.params.idArea;
 
-    cmdSQL(query, res);
+            querySQL(query, res);
     }
 };

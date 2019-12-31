@@ -1,4 +1,5 @@
 const registroHoraRouter = require('express').Router();
+const chekAuth = require('../middleware/chek-auth');
 
 const { getRegistroHorasNow, getRegistroHorasYesterday, addRegistroHora, 
         updateRegistroHoraSalida, deleteRegistroHora, updateRegistroHoraAprovado,
@@ -7,34 +8,34 @@ const { getRegistroHorasNow, getRegistroHorasYesterday, addRegistroHora,
     } = require('../controllers/registroHora.controller');
 
 registroHoraRouter.route('/')
-    .post(addRegistroHora);
+    .post(chekAuth, addRegistroHora);
 
 registroHoraRouter.route('/:id')
-    .delete(deleteRegistroHora)
-    .put(updateRegistroHoraSalida);
+    .delete(chekAuth, deleteRegistroHora)
+    .put(chekAuth, updateRegistroHoraSalida);
 
 registroHoraRouter.route('/delete/:id')
-    .put(deleteRegistroHora)
+    .put(chekAuth, deleteRegistroHora)
 
 registroHoraRouter.route('/archivar/:id')
-    .put(updateRegistroHoraArchivar);
+    .put(chekAuth, updateRegistroHoraArchivar);
 
 registroHoraRouter.route('/aprovado/:id')
-    .put(updateRegistroHoraAprovado);
+    .put(chekAuth, updateRegistroHoraAprovado);
 
 registroHoraRouter.route('/aprobarFinanzas/:id')
-    .put(updateRegistroHoraAprobarFinanzas);
+    .put(chekAuth, updateRegistroHoraAprobarFinanzas);
 
 registroHoraRouter.route('/dateNow/:idDepto')
-    .get(getRegistroHorasNow);
+    .get(chekAuth, getRegistroHorasNow);
 
 registroHoraRouter.route('/dateYest/informe/:idDepto')
-    .get(getRegistroHorasYesterday);
+    .get(chekAuth, getRegistroHorasYesterday);
 
 registroHoraRouter.route('/dateWeek/informe/:idDepto')
-    .get(getRegistroHorasWeek);
+    .get(chekAuth, getRegistroHorasWeek);
 
 registroHoraRouter.route('/dateMonth/informe/:idDepto')
-    .get(getRegistroHorasMonth);
+    .get(chekAuth, getRegistroHorasMonth);
 
 module.exports = registroHoraRouter;

@@ -1,38 +1,5 @@
-var sql = require('mssql');
-const config = require('../db/config.db');
-
-async function cmdSQL(query, res) {
-
-    new sql.ConnectionPool(config).connect().then(pool => {
-        return pool.request().query(query)
-    }).then(result => {
-        let rows = result.recordset
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.status(200).json(rows);
-        sql.close();
-    }).catch(err => {
-        res.status(500).send({ message: "${err}"})
-        sql.close();
-    })
-}
-
-function dateNow(){
-    var fechaRegistro = new Date();
-        var dd = fechaRegistro.getDate();
-        var mm = fechaRegistro.getMonth() + 1;
-        var yyyy = fechaRegistro.getFullYear();
-        var hh = fechaRegistro.getHours();
-        var min = fechaRegistro.getMinutes();
-        var ss = fechaRegistro.getSeconds();
-
-        if (dd < 10) { dd = '0' + dd; }
-        if (mm < 10) { mm = '0' + mm; }
-        if (hh < 10) { hh = '0' + hh;   }
-        if (min < 10) { min = '0' + min;   }
-        if (ss < 10) { ss = '0' + ss;   }
-
-        return fechaRegistro = yyyy+'/'+mm+'/'+dd+' '+hh+':'+min+':'+ss+'.000';
-}
+const {querySQL} = require("../db/cmdSQL");
+const {dateNow} = require('../class/date');
 
 module.exports = {
     getConvenios: (req, res) => {
@@ -45,7 +12,7 @@ module.exports = {
                     "AND co.idDepartamento = de.idDepartamento " +
                     "AND co.idBeca = be.idBeca " + 
                     "AND co.delet IS NULL ORDER BY pe.primerApellido ASC";
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     getConvenio: (req, res) => {
         var query = "SELECT co.idConvenio, pe.codEstudiante, pe.idPersona, pe.idCarrera, pe.primerNombre, pe.segundoNombre, pe.primerApellido, pe.segundoApellido, pe.semestre, pe.direccion, pe.nacionalidad, pe.fechaNacimiento, pe.ci, pe.celular, pe.estado as estadoPersona, " +
@@ -57,7 +24,7 @@ module.exports = {
                     "AND co.idDepartamento = de.idDepartamento " +
                     "AND co.idBeca = be.idBeca " + 
                     "AND co.delet IS NULL AND idConvenio = " + req.params.id;
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     getConvenioByUsuario : (req, res ) => {
         var query = "SELECT co.idConvenio, co.idDepartamento, co.idPersona, co.idBeca, co.fechaInicio, co.fechaFinal, co.fotocopiaCarnet, co.solicitudTrabajo, co.estado, co.register, co.edit " +
@@ -68,8 +35,7 @@ module.exports = {
                     "and pe.delet  IS NULL " + 
                     "AND co.delet IS NULL " +
                     "AND us.idUsuario = " + req.params.idUsuario;
-                    console.log(query);
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     addConvenio: (req, res) => {
 
@@ -81,9 +47,9 @@ module.exports = {
             req.body.fechaFinal + "', " + 
             req.body.fotocopiaCarnet + ", " +
             req.body.solicitudTrabajo + ", 1, '" +
-            dateNow() + "', null, null)";
+            dateNow + "', null, null)";
 
-        cmdSQL(query, res);
+            querySQL(query, res);
     },
     updateConvenio: (req, res) => {
         var query = "UPDATE Convenio SET " +
@@ -93,23 +59,23 @@ module.exports = {
             "fechaFinal = '" + req.body.fechaFinal + "', " +
             "fotocopiaCarnet = " + req.body.fotocopiaCarnet + ", " +
             "solicitudTrabajo = " + req.body.solicitudTrabajo + ", " +
-            "edit = '" + dateNow() + "' " + 
+            "edit = '" + dateNow + "' " + 
             "WHERE idConvenio = " + req.params.id;
 
-        cmdSQL(query, res);
+            querySQL(query, res);
     },
     updateEstadoConvenio: (req, res) => {
         var query = "UPDATE Convenio SET estado = " + req.body.estadoConvenio + ", " +
-                    "edit = '" + dateNow() + "' " + 
+                    "edit = '" + dateNow + "' " + 
                     "WHERE idConvenio = " + req.params.id;
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     deleteConvenio: (req, res) => {
 
         var query = "UPDATE Convenio SET " +
-                    "delet = '" + dateNow() + "' " + 
+                    "delet = '" + dateNow + "' " + 
                     "WHERE idConvenio = " + req.params.id;
 
-        cmdSQL(query, res);
+                    querySQL(query, res);
     }
 };

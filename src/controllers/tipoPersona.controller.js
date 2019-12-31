@@ -1,37 +1,4 @@
-var sql = require('mssql');
-const config = require('../db/config.db');
-
-async function cmdSQL(query, res) {
-
-    new sql.ConnectionPool(config).connect().then(pool => {
-        return pool.request().query(query)
-    }).then(result => {
-        let rows = result.recordset
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.status(200).json(rows);
-        sql.close();
-    }).catch(err => {
-        res.status(500).send({ message: "${err}"})
-        sql.close();
-    })
-}
-
-function dateNow(){
-    var fechaRegistro = new Date();
-        var dd = fechaRegistro.getDate();
-        var mm = fechaRegistro.getMonth() + 1;
-        var yyyy = fechaRegistro.getFullYear();
-
-        if (dd < 10) {
-            dd = '0' + dd;
-          }
-          
-          if (mm < 10) {
-            mm = '0' + mm;
-          }
-
-          return fechaRegistro = yyyy+'/'+mm+'/'+dd;
-}
+const {querySQL} = require("../db/cmdSQL");
 
 module.exports = {
     getTipoPersona: (req, res) => {
@@ -42,7 +9,7 @@ module.exports = {
                     "WHERE pe.idPersona = us.idPersona " +
                     "AND us.delet IS NULL " +
                     "AND us.idRol = " + req.params.idRol + " ORDER BY pe.primerApellido ASC ";
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     //Listar los estudiantes x departamento que estan activos 
     getEstudianteDepartamento: (req, res) => {
@@ -63,7 +30,7 @@ module.exports = {
                     "AND us.delet IS NULL " +
                     "AND co.delet IS NULL " +
                     "ORDER BY pe.primerApellido ASC";
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     //Listar los estudiantes x departamento para informacion 
     getEstudianteInfo: (req, res) => {
@@ -81,7 +48,7 @@ module.exports = {
                     "AND pe.idPersona = " + req.params.idPersona + " " +
                     "ORDER BY pe.primerApellido ASC"; 
 
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     //Listar los estudiantes para finanzas para la informacion de los estudiantes
     getEstudianteInfoFinanzas: (req, res) => {
@@ -103,7 +70,7 @@ module.exports = {
                     "AND us.idRol = 5 " +
                     "AND aa.delet IS NULL " +
                     "ORDER BY pe.primerApellido ASC";
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     //Buscar estudiante con datos para finanzas
     getEstudianteInfoF: (req, res) => {
@@ -126,7 +93,7 @@ module.exports = {
                     "AND us.idRol = 5 " +
                     "AND aa.delet IS NULL " +
                     "ORDER BY pe.primerApellido ASC";
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     //Buscar estudiante X EL idConvenio PARA ver su historial de acreedor
     getConvenioHistorial: (req, res) => {
@@ -148,11 +115,11 @@ module.exports = {
                     "AND co.idConvenio = " + req.params.idConvenio + " " +
                     "AND us.idRol = 5 " +
                     "AND aa.delet IS NULL ";
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     getMaxIdPersona: (req, res) => {
         var query = "SELECT max(idPersona) as idPersona FROM Persona";
-        cmdSQL(query, res);
+        querySQL(query, res);
     },
     addTipoPersona: (req, res) => {},
     updateTipoPersona: (req, res) => { }

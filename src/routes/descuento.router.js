@@ -1,17 +1,18 @@
 const descuentoRouter = require('express').Router();
+const chekAuth = require('../middleware/chek-auth');
 
 const { getDescuentos, getDescuentosByConvenio , addDescuento, updateDescuento, deleteDescuento
         } = require('../controllers/descuento.controller');
 
 descuentoRouter.route('/')
-    .get(getDescuentos)
-    .post(addDescuento);
+    .get(chekAuth, getDescuentos)
+    .post(chekAuth, addDescuento);
 
 descuentoRouter.route('/:id')
-    .put(updateDescuento)
-    .delete(deleteDescuento);
+    .put(chekAuth, updateDescuento)
+    .delete(chekAuth, deleteDescuento);
 
 descuentoRouter.route('/convenio/:idConvenio')
-    .get(getDescuentosByConvenio);
+    .get(chekAuth, getDescuentosByConvenio);
 
 module.exports = descuentoRouter;

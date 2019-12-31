@@ -1,38 +1,5 @@
-var sql = require('mssql');
-const config = require('../db/config.db');
-
-async function cmdSQL(query, res) {
-
-    new sql.ConnectionPool(config).connect().then(pool => {
-        return pool.request().query(query)
-    }).then(result => {
-        let rows = result.recordset
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.status(200).json(rows);
-        sql.close();
-    }).catch(err => {
-        res.status(500).send({ message: "${err}"})
-        sql.close();
-    })
-}
-
-function dateNow(){
-    var fechaRegistro = new Date();
-        var dd = fechaRegistro.getDate();
-        var mm = fechaRegistro.getMonth() + 1;
-        var yyyy = fechaRegistro.getFullYear();
-        var hh = fechaRegistro.getHours();
-        var min = fechaRegistro.getMinutes();
-        var ss = fechaRegistro.getSeconds();
-
-        if (dd < 10) { dd = '0' + dd; }
-        if (mm < 10) { mm = '0' + mm; }
-        if (hh < 10) { hh = '0' + hh;   }
-        if (min < 10) { min = '0' + min;   }
-        if (ss < 10) { ss = '0' + ss;   }
-
-        return fechaRegistro = yyyy+'/'+mm+'/'+dd+' '+hh+':'+min+':'+ss+'.000';
-}
+const {querySQL} = require("../db/cmdSQL");
+const {dateNow} = require('../class/date');
 
 function date(days){
     milisegundos=parseInt(35*24*60*60*1000);
@@ -92,31 +59,6 @@ function startMonth(){
     if (mm < 10) { mm = '0' + mm; }
     return yyy+"/"+mm+"/"+dd;
 }
-function option(){
-    var fecha=new Date();
- 
-	// Cogemos la fecha actual en formato milisegundos desde 1/1/1970 y le 
-	// restamos tantos milisegundos como tiene un dia.
-	var ayer=new Date(fecha.getTime() - 24*60*60*1000);
- 
-	// Sumamos los milisegundos que tiene un dia
-	var manana=new Date(fecha.getTime() + 24*60*60*1000);
- 
-	// Sumamos los milisegundos que tiene una semana
-	var laProximaSemana=new Date(fecha.getTime() + (24*60*60*1000)*7);
- 
-	// Restamos los milisegundos que tiene una semana
-	var HaceUnaSemana=new Date(fecha.getTime() - (24*60*60*1000)*7);
- 
-	console.log("La Fecha de hoy es: "+fecha.getDate()+"/"+fecha.getMonth()+"/"+fecha.getFullYear());
- 
-	console.log("La Fecha de ayer es: "+ayer.getDate()+"/"+ayer.getMonth()+"/"+ayer.getFullYear());
- 
-    console.log("La Fecha de mañana es: "+manana.getDate()+"/"+manana.getMonth()+"/"+manana.getFullYear());
- 
-	console.log("La Fecha de la próxima semana es: "+laProximaSemana.getDate()+"/"+laProximaSemana.getMonth()+"/"+laProximaSemana.getFullYear());
-    console.log("La Fecha de hace una semana es: "+HaceUnaSemana.getDate()+"/"+HaceUnaSemana.getMonth()+"/"+HaceUnaSemana.getFullYear());
-}
 
 module.exports = {
     //este metodo es utilizado para generar informes registro de ingreso/salida de HOY y AYER
@@ -146,7 +88,7 @@ module.exports = {
                     "AND rh.delet IS NULL " +
                     "AND co.delet IS NULL " +
                     "AND de.idDepartamento = " + req.params.idDepto;
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     getRegistroHorasYesterday: (req, res) =>{
 
@@ -174,7 +116,7 @@ module.exports = {
                     "AND rh.delet IS NULL " +
                     "AND co.delet IS NULL " +
                     "AND de.idDepartamento = " + req.params.idDepto;
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     getRegistroHorasWeek: (req, res) => {
         var query = "SELECT rh.idRegistroHora, rh.idConvenio, TRY_CONVERT(date, rh.fechaHoraEntrada) as fechaEntrada, TRY_CONVERT(date, rh.fechaHoraSalida) as fechaSalida, " +
@@ -201,7 +143,7 @@ module.exports = {
                     "AND rh.delet IS NULL " +
                     "AND co.delet IS NULL " +
                     "AND de.idDepartamento = " + req.params.idDepto;
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     getRegistroHorasMonth: (req, res) => {
         var query = "SELECT rh.idRegistroHora, rh.idConvenio, TRY_CONVERT(date, rh.fechaHoraEntrada) as fechaEntrada, TRY_CONVERT(date, rh.fechaHoraSalida) as fechaSalida, " +
@@ -228,7 +170,7 @@ module.exports = {
                     "AND rh.delet IS NULL " +
                     "AND co.delet IS NULL " +
                     "AND de.idDepartamento = " + req.params.idDepto;
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     //para marcar hora de entrada
     addRegistroHora: (req, res) => {
@@ -238,19 +180,19 @@ module.exports = {
         }
         var query = "INSERT INTO RegistroHora VALUES( " +
             req.body.idConvenio + ", '" +
-            dateNow() + "', null, " +
+            dateNow + "', null, " +
             observacion + ", 0, 0, null, null)";
 
-        cmdSQL(query, res);
+            querySQL(query, res);
     },
     //para marcar hora de salida
     updateRegistroHoraSalida: (req, res) => {
         var query = "UPDATE RegistroHora SET " +
             "aprobado = '0', " +
-            "fechaHoraSalida = '" + dateNow() + "' " +
+            "fechaHoraSalida = '" + dateNow + "' " +
             "WHERE idRegistroHora = " + req.params.id;
 
-        cmdSQL(query, res);
+            querySQL(query, res);
     },
     //se registrara la aprobacion y edit sera la fecha de aprovacion 
     updateRegistroHoraAprovado: (req, res) => {
@@ -262,10 +204,10 @@ module.exports = {
         var query = "UPDATE RegistroHora SET " +
         "observacion = " + observacion + ", " +
         "aprobado = " + req.body.aprobadoRegistroHora + ", " +
-        "edit = '" + dateNow() + "' " +
+        "edit = '" + dateNow + "' " +
         "WHERE idRegistroHora = "+ req.params.id;
 
-        cmdSQL(query, res);
+        querySQL(query, res);
     },
     //se registrara la aprobacion de Finanzas para que luego no pueda cambiar de aprobacion el
     //jefe de departamento o eliminar
@@ -274,24 +216,24 @@ module.exports = {
         "aprobadoFinanzas = " + req.body.aprobadoFinanzas + " " +
         "WHERE idRegistroHora = "+ req.params.id;
 
-        cmdSQL(query, res);
+        querySQL(query, res);
     },
     //Se cambiara de estado una vez que se haya registrado en informeEstudiante
     updateRegistroHoraEstado: (req, res) => {
         var query = "UPDATE RegistroHora SET " +
             "estado = '" + req.body.aprovadoRegistroHora + "', " +
-            "edit = '" + dateNow() + "' " +
+            "edit = '" + dateNow + "' " +
             "WHERE idRegistroHora = " + req.params.id;
 
-        cmdSQL(query, res);
+            querySQL(query, res);
     },
     updateRegistroHoraArchivar: (req, res) => {
 
         var query = "UPDATE RegistroHora SET " +
-                    "archivar = '" + dateNow() + "' " +
+                    "archivar = '" + dateNow + "' " +
                     "WHERE idRegistroHora = " + req.params.id;
 
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     deleteRegistroHora: (req, res) => {
 
@@ -302,9 +244,9 @@ module.exports = {
 
         var query = "UPDATE RegistroHora SET " +
                     "observacion = " + observacion + ", " +
-                    "delet = '" + dateNow() + "' " +
+                    "delet = '" + dateNow + "' " +
                     "WHERE idRegistroHora = " + req.params.id;
 
-        cmdSQL(query, res);
+                    querySQL(query, res);
     }
 };

@@ -1,54 +1,21 @@
-var sql = require('mssql');
-const config = require('../db/config.db');
-
-async function cmdSQL(query, res) {
-    new sql.ConnectionPool(config).connect().then(pool => {
-        return pool.request().query(query)
-    }).then(result => {
-        let rows = result.recordset
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.status(200).json(rows);
-        sql.close();
-    }).catch(err => {
-        res.status(500).send({ state: false, message: 'Invalid command'})
-        sql.close();
-    })
-}
-
-function dateNow(){
-    var fechaRegistro = new Date();
-        var dd = fechaRegistro.getDate();
-        var mm = fechaRegistro.getMonth() + 1;
-        var yyyy = fechaRegistro.getFullYear();
-        var hh = fechaRegistro.getHours();
-        var min = fechaRegistro.getMinutes();
-        var ss = fechaRegistro.getSeconds();
-
-        if (dd < 10) { dd = '0' + dd; }
-        if (mm < 10) { mm = '0' + mm; }
-        if (hh < 10) { hh = '0' + hh;   }
-        if (min < 10) { min = '0' + min;   }
-        if (ss < 10) { ss = '0' + ss;   }
-
-        return fechaRegistro = yyyy+'/'+mm+'/'+dd+' '+hh+':'+min+':'+ss+'.000';
-}
-
+const {querySQL} = require("../db/cmdSQL");
+const {dateNow} = require('../class/date');
 
 module.exports = {
     getPeoples: (req, res) => {
         var query = "SELECT * FROM Persona WHERE delet IS NULL ORDER BY primerApellido ASC";
-        cmdSQL(query, res);
+        querySQL(query, res);
     },
     getPeople: (req, res) => {
         var query = "SELECT idCarrera, codEstudiante, primerNombre, segundoNombre, primerApellido, segundoApellido, ci, semestre, nacionalidad, direccion, celular, fechaNacimiento, estado as estadoPersona, register as fechaRegistroPersona, edit as editPersona " +
                     "FROM Persona " +
                     "WHERE idPersona =" + req.params.id;
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     //Verificar si codEstudiante existe
     getCodEstudiante: (req, res) => {
         var query = 'SELECT codEstudiante FROM Persona WHERE codEstudiante = '+ req.params.codStudente + ' AND delet IS NULL';
-        cmdSQL(query, res);
+        querySQL(query, res);
     },
     addPeople: (req, res) => {
         var idCarrera, codEstudiante, segundoNombre, segundoApellido, semestre, fechaNac;
@@ -81,9 +48,9 @@ module.exports = {
             req.body.direccion + "', " +
             req.body.celular + ", '" + 
             req.body.fechaNacimiento + "', 1, '" + 
-            dateNow() + "', null, null)";
+            dateNow + "', null, null)";
 
-        cmdSQL(query, res);
+            querySQL(query, res);
     },
     updatePeople: (req, res) => {
 
@@ -120,17 +87,17 @@ module.exports = {
                     "ci = '" + req.body.ci + "', " +
                     "semestre = " + semestre + ", " +
                     "celular = " + req.body.celular + ", " +
-                    "edit = '" + dateNow() + "' " +
+                    "edit = '" + dateNow + "' " +
                     "WHERE idPersona = " + req.params.id;
 
-        cmdSQL(query, res);
+                    querySQL(query, res);
     },
     deletePeople: (req, res) => {
 
         var query = "UPDATE Persona SET " +
-        "delet = '" + dateNow() + "' " +
+        "delet = '" + dateNow + "' " +
         "WHERE idPersona = " + req.params.id;
 
-        cmdSQL(query, res);
+        querySQL(query, res);
     }
 };

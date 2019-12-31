@@ -1,4 +1,5 @@
 const tipoPersonaRouter = require('express').Router();
+const chekAuth = require('../middleware/chek-auth');
 
 const { getTipoPersona, getEstudianteDepartamento, getEstudianteInfo, 
         getEstudianteInfoFinanzas, getEstudianteInfoF,
@@ -6,25 +7,25 @@ const { getTipoPersona, getEstudianteDepartamento, getEstudianteInfo,
         } = require('../controllers/tipoPersona.controller');
 
 tipoPersonaRouter.route('/')
-    .get(getMaxIdPersona) /*Para enviar el max idPersona ()OJO*/
-    .post(addTipoPersona);
+    .get(chekAuth, getMaxIdPersona) /*Para enviar el max idPersona ()OJO*/
+    .post(chekAuth, addTipoPersona);
 
 tipoPersonaRouter.route('/:idRol')
-    .get(getTipoPersona);
+    .get(chekAuth, getTipoPersona);
 
 tipoPersonaRouter.route('/historialConvenio/:idConvenio')
-    .get(getConvenioHistorial);
+    .get(chekAuth, getConvenioHistorial);
 
 tipoPersonaRouter.route('/estDep/:idDep')
-    .get(getEstudianteDepartamento);
+    .get(chekAuth, getEstudianteDepartamento);
 
 tipoPersonaRouter.route('/infoEstudiante/:idDep/:idPersona')
-    .get(getEstudianteInfo);
+    .get(chekAuth, getEstudianteInfo);
 
 tipoPersonaRouter.route('/finanzas/infoEstudiante/')
-    .get(getEstudianteInfoFinanzas);
+    .get(chekAuth, getEstudianteInfoFinanzas);
 
 tipoPersonaRouter.route('/finanzas/infoEstudiante/:id')
-    .get(getEstudianteInfoF);
+    .get(chekAuth, getEstudianteInfoF);
 
 module.exports = tipoPersonaRouter;

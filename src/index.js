@@ -1,5 +1,6 @@
 const morgan = require('morgan');
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const cors = require('cors')
 
 const app = express();
@@ -36,12 +37,14 @@ app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
 app.use(function(req, res, next) {
+    const bearerHeader = req.headers['authorization'];
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Credentials", "true");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept", 'application/json', 'text/json');
     res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
     next();
 })
+
 
 //routes
 app.use('/user', userRouter)

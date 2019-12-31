@@ -1,28 +1,29 @@
 const departamentoRouter = require('express').Router();
+const chekAuth = require('../middleware/chek-auth');
 
 const {getDepartamentoById, getAllDepartamentos, getDepartamentos, getDepartamento, getDepartamentoName, getDepartamentosUser, addDepartamento, updateDepartamento, updateEstadoDepartamento, deleteDepartamento } = require('../controllers/departamento.controller');
 
 departamentoRouter.route('/')
-    .get(getDepartamentos)
-    .post(addDepartamento);
+    .get(chekAuth, getDepartamentos)
+    .post(chekAuth, addDepartamento);
 
 departamentoRouter.route('/:id')
-    .get(getDepartamento)
-    .put(updateDepartamento)
-    .delete(deleteDepartamento);
+    .get(chekAuth, getDepartamento)
+    .put(chekAuth, updateDepartamento)
+    .delete(chekAuth, deleteDepartamento);
 //PARA LISTAR LOS DEPTS DEL MODULO Departamento de la DB
 departamentoRouter.route('/search/:nameDepto')
-    .get(getDepartamentoName);
+    .get(chekAuth, getDepartamentoName);
 //PARA LISTAR LOS DEPTS DEL MODULO Departamento de la DB
 departamentoRouter.route('/all/depts')
-    .get(getAllDepartamentos);
+    .get(chekAuth, getAllDepartamentos);
 //Para editar el estado del departamento
 departamentoRouter.route('/editEstado/:id')
-    .put(updateEstadoDepartamento);
+    .put(chekAuth, updateEstadoDepartamento);
 //Para editar el estado del departamento
 departamentoRouter.route('/depsUser/:idRol/:idUser')
-    .get(getDepartamentosUser);
+    .get(chekAuth, getDepartamentosUser);
 
 departamentoRouter.route('/getDepartamentoById/:idDepartamento')
-    .get(getDepartamentoById);
+    .get(chekAuth, getDepartamentoById);
 module.exports = departamentoRouter;

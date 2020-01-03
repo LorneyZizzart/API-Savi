@@ -20,7 +20,7 @@ userRouter.route('/:id/:idPersona')
 userRouter.route('/search/name/:usuario')
     .get(chekAuth, searchUser)
 
-userRouter.route('/verificarUser/')
+userRouter.route('/login/')
     .post(getVerificarUser);
 
 module.exports = userRouter;

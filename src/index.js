@@ -1,6 +1,5 @@
 const morgan = require('morgan');
 const express = require('express');
-const jwt = require('jsonwebtoken');
 const cors = require('cors')
 
 const app = express();
@@ -37,7 +36,6 @@ app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
 app.use(function(req, res, next) {
-    const bearerHeader = req.headers['authorization'];
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Credentials", "true");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept", 'application/json', 'text/json');
@@ -66,6 +64,10 @@ app.use('/carrera', carrera)
 app.use('/acreedorPendiente', acreedorPendiente)
 // API SISTEMA ACADEMICO
 app.use('/apiSistemaAcademico', apiSistemaAcademico)
+app.use('/', function(req, res) {
+    res.send('<h2>Bienvenido a la API REST SABI</h2>')
+    res.end();
+})
 
 //static files
 //start server

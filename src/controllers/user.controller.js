@@ -40,8 +40,8 @@ module.exports = {
         querySQL(query, res);
     },//para el login 
     getVerificarUser: (req, res) => {
-        // var query = "SELECT idUsuario, idPersona, idRol, usuario, password, estado FROM Usuario WHERE usuario = '" + req.body.usuario + "' AND password = '" + req.body.password + "' AND delet IS NULL";
-        var query = "SELECT idUsuario, idPersona, idRol, usuario, password, estado FROM Usuario WHERE usuario = '" + cryptoJS.get(req.body.usuario) + "' AND password = '" + cryptoJS.get(req.body.password) + "' AND delet IS NULL";
+        var query = "SELECT idUsuario, idPersona, idRol, usuario, password, estado FROM Usuario WHERE usuario = '" + req.body.usuario + "' AND password = '" + req.body.password + "' AND delet IS NULL";
+        // var query = "SELECT idUsuario, idPersona, idRol, usuario, password, estado FROM Usuario WHERE usuario = '" + cryptoJS.get(req.body.usuario) + "' AND password = '" + cryptoJS.get(req.body.password) + "' AND delet IS NULL";
         authToken(query, res);
     },//para verificar si el nombre de usuario existe
     searchUser: (req, res) => {
